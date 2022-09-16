@@ -1,35 +1,47 @@
 #include <iostream>
-#include <stack>
+#include <queue>
+#include <deque>
+
+/*
+ * Идея:
+ * https://stackoverflow.com/questions/12054415/get-min-max-in-o1-time-from-a-queue
+ */
 
 class Queue {
 public:
     void push(int value) {
-        stack1_.push(value);
+        data_.push(value);
+
+        if (min_.empty()) {
+            min_.push_back(value);
+        } else {
+            while (!min_.empty() && min_.back() > value) {
+                min_.pop_back();
+            }
+            min_.push_back(value);
+        }
     }
 
     int pop() {
-        if (stack2_.empty()) {
-            while (!stack1_.empty()) {
-                stack2_.push(stack1_.top());
-                stack1_.pop();
-            }
-        }
+        int value = data_.front();
 
-        int value = stack2_.top();
-        stack2_.pop();
+        if (min_.front() == value) {
+            data_.pop();
+            min_.pop_front();
+        } else {
+            data_.pop();
+        }
 
         return value;
     }
 
     int min() const {
-        return min_number_;
+        return min_.front();
     }
 
 private:
-    std::stack<int> stack1_;
-    std::stack<int> stack2_;
-
-    int min_number_;
+    std::queue<int> data_;
+    std::deque<int> min_;
 };
 
 using std::cin;
@@ -40,9 +52,8 @@ int main() {
     std::string input;
     int num;
 
-    int operations;
-    cin >> operations;
-    int i = 0;
+/*    int operations;
+    cin >> operations;*/
 
     do {
         cin >> input;
@@ -53,11 +64,13 @@ int main() {
         } else if (input == "-") {
             cout << queue.min() << " ";
             cout << queue.pop() << "\n";
+        } else if (input == "exit") {
+            break;
         } else {
-            return 0;
+            continue;
         }
-        ++i;
-    } while (i < operations);
+
+    } while (true);
 
     return 0;
 }
