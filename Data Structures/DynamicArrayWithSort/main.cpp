@@ -1,9 +1,40 @@
 #include <iostream>
 
-template<typename T>
+template <typename T>
 class Vector {
 public:
     struct Iterator {
+        using IteratorCategory = std::random_access_iterator_tag;
+        using DifferenceType = std::ptrdiff_t;
+
+        explicit Iterator(int *ptr) : m_ptr_(ptr){};
+
+        int &operator*() const;
+
+        int *operator->();
+
+        Iterator &operator++();
+
+        Iterator operator++(int);
+
+        Iterator &operator--();
+
+        Iterator operator--(int);
+
+        Iterator operator+(const DifferenceType &movement);
+
+        Iterator operator-(const DifferenceType &movement);
+
+        Iterator &operator+=(const DifferenceType &movement);
+
+        Iterator &operator-=(const DifferenceType &movement);
+
+        friend bool operator==(const Iterator &a, const Iterator &b);
+
+        friend bool operator!=(const Iterator &a, const Iterator &b);
+
+    private:
+        int *m_ptr_;
     };
 
     Vector() {
@@ -14,7 +45,7 @@ public:
 
     explicit Vector(int size) {
         this->size_ = 0;
-        capacity_ = size;
+        capacity_ = size * 2;
         data_ = new T[capacity_];
     }
 
@@ -58,6 +89,10 @@ public:
         for (int i = 0; i < size_; ++i) {
             new_arr[i] = data_[i];
         }
+
+        size_ = new_size;
+        capacity_ = size_ * 2;
+
         delete[] data_;
         data_ = new_arr;
     }
@@ -72,6 +107,9 @@ public:
     }
 
     void popBack() {
+        if (size_ == 0) {
+            throw std::runtime_error("Empty Array!");
+        }
         --size_;
     }
 
@@ -80,14 +118,59 @@ public:
     }
 
     void insert(int pos, int value) {
-        if ()
+    }
+
+    void erase(int pos);
+
+    int at(int pos);
+
+    int front() {
+        if (size_ == 0) {
+            throw std::runtime_error("Empty Array!");
+        }
+        return data_[0];
+    }
+
+    int back() {
+        if (size_ == 0) {
+            throw std::runtime_error("Empty Array!");
+        }
+        return data_[size_ - 1];
+    }
+
+    int &operator[](int pos) const {
+        return data_[pos];
+    }
+
+    Vector &operator=(const Vector &other) {
+        size_ = other.size_;
+        capacity_ = other.capacity_;
+
+        delete[] data_;
+        data_ = new T[capacity_];
+
+        for (int i = 0; i < other.size_; ++i) {
+            data_[i] = other.data_[i];
+        }
+    }
+
+    Iterator begin() {
+        if (size_ == 0) {
+            throw std::runtime_error("Empty Array!");
+        }
+    }
+
+    Iterator end() {
+        if (size_ == 0) {
+            throw std::runtime_error("Empty Array!");
+        }
     }
 
     ~Vector() {
         delete[] data_;
     }
 
-public:
+private:
     int *data_;
     int capacity_;
     int size_;
@@ -97,23 +180,45 @@ using std::cout;
 
 int main() {
     Vector<int> vector(5);
-    cout << vector.size_ << "\n";
-    cout << vector.capacity_ << "\n";
+    cout << "size: " << vector.getSize() << "\n";
+    cout << "capacity: " << vector.getCapacity() << "\n";
     for (int i = 0; i < 10; ++i) {
         vector.pushBack(i);
     }
 
-    cout << vector.size_ << "\n";
-    cout << vector.capacity_ << "\n";
+    cout << "size: " << vector.getSize() << "\n";
+    cout << "capacity: " << vector.getCapacity() << "\n";
 
-    for (int i = 0; i < 10; ++i) {
-        cout << vector.data_[i] << "\n";
+    for (int i = 0; i < vector.getSize(); ++i) {
+        cout << vector[i] << "\t";
     }
+    cout << "\n";
 
     vector.popBack();
+    vector.popBack();
+    vector.popBack();
 
-    cout << vector.size_ << "\n";
-    cout << vector.capacity_ << "\n";
+    for (int i = 0; i < vector.getSize(); ++i) {
+        cout << vector[i] << "\t";
+    }
+    cout << "\n";
+    cout << "size: " << vector.getSize() << "\n";
+    cout << "capacity: " << vector.getCapacity() << "\n";
+
+    vector.clear();
+    cout << "size: " << vector.getSize() << "\n";
+    cout << "capacity: " << vector.getCapacity() << "\n";
+    if (vector.getSize() == 0) {
+        cout << "empty"
+             << "\n";
+    } else {
+        for (int i = 0; i < vector.getSize(); ++i) {
+
+            cout << vector[i] << "\t";
+        }
+        cout << "\n";
+    }
+    cout << std::boolalpha << vector.isEmpty() << "\n";
 
     return 0;
 }
