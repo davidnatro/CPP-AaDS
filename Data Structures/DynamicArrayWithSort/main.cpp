@@ -1,6 +1,5 @@
 #include <iostream>
 
-template <typename T>
 class Vector {
 public:
     struct Iterator {
@@ -9,29 +8,65 @@ public:
 
         explicit Iterator(int *ptr) : m_ptr_(ptr){};
 
-        int &operator*() const;
+        int &operator*() const {
+            return *m_ptr_;
+        }
 
-        int *operator->();
+        int *operator->() {
+            return m_ptr_;
+        }
 
-        Iterator &operator++();
+        Iterator &operator++() {
+            ++m_ptr_;
+            return *this;
+        }
 
-        Iterator operator++(int);
+        Iterator operator++(int) {
+            Iterator old = *this;
+            ++m_ptr_;
+            return old;
+        }
 
-        Iterator &operator--();
+        Iterator &operator--() {
+            --m_ptr_;
+            return *this;
+        }
 
-        Iterator operator--(int);
+        Iterator operator--(int) {
+            Iterator old = *this;
+            --m_ptr_;
+            return old;
+        }
 
-        Iterator operator+(const DifferenceType &movement);
+        Iterator operator+(const DifferenceType &movement) {
+            Iterator copy = *this;
+            copy += movement;
+            return copy;
+        }
 
-        Iterator operator-(const DifferenceType &movement);
+        Iterator operator-(const DifferenceType &movement) {
+            Iterator copy = *this;
+            copy -= movement;
+            return copy;
+        }
 
-        Iterator &operator+=(const DifferenceType &movement);
+        Iterator &operator+=(const DifferenceType &movement) {
+            m_ptr_ += movement;
+            return *this;
+        }
 
-        Iterator &operator-=(const DifferenceType &movement);
+        Iterator &operator-=(const DifferenceType &movement) {
+            m_ptr_ -= movement;
+            return *this;
+        }
 
-        friend bool operator==(const Iterator &a, const Iterator &b);
+        friend bool operator==(const Iterator &a, const Iterator &b) {
+            return a.m_ptr_ == b.m_ptr_;
+        }
 
-        friend bool operator!=(const Iterator &a, const Iterator &b);
+        friend bool operator!=(const Iterator &a, const Iterator &b) {
+            return !(a == b);
+        }
 
     private:
         int *m_ptr_;
@@ -40,19 +75,19 @@ public:
     Vector() {
         capacity_ = 0;
         size_ = 0;
-        data_ = new T[capacity_];
+        data_ = new int[capacity_];
     }
 
     explicit Vector(int size) {
         this->size_ = 0;
         capacity_ = size * 2;
-        data_ = new T[capacity_];
+        data_ = new int[capacity_];
     }
 
     Vector(const int *vals, int size) {
         size_ = size;
         capacity_ = size;
-        data_ = new T[capacity_];
+        data_ = new int[capacity_];
         for (int i = 0; i < size; ++i) {
             data_[i] = vals[i];
         }
@@ -61,7 +96,7 @@ public:
     Vector(const Vector &vector) {
         size_ = vector.size_;
         capacity_ = vector.capacity_;
-        data_ = new T[capacity_];
+        data_ = new int[capacity_];
         for (int i = 0; i < size_; ++i) {
             data_[i] = vector[i];
         }
@@ -70,6 +105,11 @@ public:
     Vector(std::initializer_list<int> vals) {
         size_ = vals.size();
         capacity_ = size_;
+        int index = 0;
+        for (const int *it = vals.begin(); it != vals.end(); ++it) {
+            data_[index] = *it;
+            ++index;
+        }
     }
 
     int getSize() const {
@@ -85,7 +125,7 @@ public:
     }
 
     void resize(int new_size) {
-        int *new_arr = new T[new_size];
+        int *new_arr = new int[new_size];
         for (int i = 0; i < size_; ++i) {
             new_arr[i] = data_[i];
         }
@@ -118,11 +158,41 @@ public:
     }
 
     void insert(int pos, int value) {
+        if (pos < 0 || pos >= capacity_) {
+            throw std::runtime_error("'Wrong Position!");
+        }
+
+        if (size_ >= capacity_) {
+            capacity_ *= 2;
+            resize(capacity_);
+        }
+
+        for (int index = size_ - 1; index >= pos; --index) {
+            data_[index + 1] = data_[index];
+        }
+
+        data_[pos] = value;
+        ++size_;
     }
 
-    void erase(int pos);
+    void erase(int pos) {
+        if (pos < 0 || pos >= capacity_) {
+            throw std::runtime_error("'Wrong Position!");
+        }
 
-    int at(int pos);
+        for (int i = pos; i < size_ - 1; ++i) {
+            data_[i] = data_[i + 1];
+        }
+        --size_;
+    }
+
+    int at(int pos) {
+        if (pos < 0 || pos >= capacity_) {
+            throw std::runtime_error("'Wrong Position!");
+        }
+
+        return data_[pos];
+    }
 
     int front() {
         if (size_ == 0) {
@@ -147,7 +217,7 @@ public:
         capacity_ = other.capacity_;
 
         delete[] data_;
-        data_ = new T[capacity_];
+        data_ = new int[capacity_];
 
         for (int i = 0; i < other.size_; ++i) {
             data_[i] = other.data_[i];
@@ -158,12 +228,16 @@ public:
         if (size_ == 0) {
             throw std::runtime_error("Empty Array!");
         }
+
+        return Iterator(data_);
     }
 
     Iterator end() {
         if (size_ == 0) {
             throw std::runtime_error("Empty Array!");
         }
+
+        return Iterator(data_ + size_);
     }
 
     ~Vector() {
@@ -176,10 +250,16 @@ private:
     int size_;
 };
 
+void mergeSort(Vector::Iterator begin, Vector::Iterator end) {
+}
+
+void insertionSort(Vector::Iterator begin, Vector::Iterator end) {
+}
+
 using std::cout;
 
 int main() {
-    Vector<int> vector(5);
+    Vector vector(5);
     cout << "size: " << vector.getSize() << "\n";
     cout << "capacity: " << vector.getCapacity() << "\n";
     for (int i = 0; i < 10; ++i) {
@@ -205,7 +285,7 @@ int main() {
     cout << "size: " << vector.getSize() << "\n";
     cout << "capacity: " << vector.getCapacity() << "\n";
 
-    vector.clear();
+    // vector.clear();
     cout << "size: " << vector.getSize() << "\n";
     cout << "capacity: " << vector.getCapacity() << "\n";
     if (vector.getSize() == 0) {
@@ -219,6 +299,31 @@ int main() {
         cout << "\n";
     }
     cout << std::boolalpha << vector.isEmpty() << "\n";
+
+    for (auto it = vector.begin(); it != vector.end(); ++it) {
+        cout << *it << "\t";
+    }
+    cout << "\n";
+    vector.insert(3, 4);
+
+    for (auto it = vector.begin(); it != vector.end(); ++it) {
+        cout << *it << "\t";
+    }
+
+    cout << "\n";
+    vector.erase(4);
+    vector.erase(0);
+    vector.erase(2);
+    vector.insert(2, 3);
+    vector.popBack();
+    for (auto it = vector.begin(); it != vector.end(); ++it) {
+        cout << *it << "\t";
+    }
+    cout << "\n";
+
+    cout << vector.back() << "\n";
+    cout << vector.front() << "\n";
+    cout << vector.at(0) << "\n";
 
     return 0;
 }
