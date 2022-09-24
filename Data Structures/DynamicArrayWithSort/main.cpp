@@ -272,9 +272,8 @@ private:
     int size_ = 0;
 };
 
-Vector merge(const Vector::Iterator &begin, const Vector::Iterator &middle,
-             const Vector::Iterator &end) {
-    Vector vector(end - begin);
+Vector merge(Vector::Iterator &begin, Vector::Iterator &middle, Vector::Iterator &end) {
+    Vector vector;
     Vector::Iterator i = begin;
     Vector::Iterator j = middle;
     while (i != middle && j != end) {
@@ -307,12 +306,13 @@ void mergeSort(Vector::Iterator begin, Vector::Iterator end) {
     mergeSort(begin, middle);
     mergeSort(middle, end);
 
-    Vector sorted = merge(begin, middle, end);
+    Vector vector = merge(begin, middle, end);
 
-    for (auto i : sorted) {
-        std::cout << i << "\t";
+    int index = 0;
+    for (Vector::Iterator it = begin; it != end; ++it) {
+        *it = vector[index];
+        ++index;
     }
-    std::cout << "\n";
 }
 
 void insertionSort(Vector::Iterator begin, Vector::Iterator end) {
@@ -327,7 +327,7 @@ void insertionSort(Vector::Iterator begin, Vector::Iterator end) {
 
 using std::cout;
 
-void print(Vector vector) {
+void print(Vector &vector) {
     // cout << "size: " << vector.getSize() << " capacity: " << vector.getCapacity() << "\n";
     for (Vector::Iterator it = vector.begin(); it != vector.end(); ++it) {
         cout << *it << "\t";
