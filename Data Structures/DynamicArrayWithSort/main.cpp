@@ -1,5 +1,4 @@
 #include <iostream>
-#include <iterator>
 #include <initializer_list>
 
 class Vector {
@@ -252,6 +251,8 @@ public:
         for (int i = 0; i < other.size_; ++i) {
             data_[i] = other.data_[i];
         }
+
+        return *this;
     }
 
     Iterator begin() {
