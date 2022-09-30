@@ -1,9 +1,6 @@
 #include <iostream>
 #include <cmath>
 
-using std::cin;
-using std::cout;
-
 class Node {
 public:
     int data{};
@@ -18,28 +15,30 @@ public:
 class List {
 private:
     const int max_value_ = 2 * pow(10, 9);
+    int size_ = 0;
 
     bool isValid(int value) {
-        return value >= -max_value_ || value <= max_value_;
+        return value >= -max_value_ && value <= max_value_;
     }
 
 public:
+    Node* head{};
+    Node* tail{};
+
     List() {
         head = nullptr;
         tail = nullptr;
     }
 
     List(int* values, size_t size) {
-        for (int i = 0; i < size; ++i) {
+        for (size_t i = 0; i < size; ++i) {
             if (!isValid(values[i])) {
+                this->~List();
                 throw std::runtime_error("Wrong Value!");
             }
-        }
-    }
 
-    ~List() {
-        delete head;
-        delete tail;
+            pushBack(values[i]);
+        }
     }
 
     void pushBack(int value) {
@@ -55,60 +54,205 @@ public:
             tail->next = head;
         } else {
             Node* temp = tail;
-
             tail = new Node(value);
+
             tail->next = head;
+            head->previous = tail;
+
             temp->next = tail;
             tail->previous = temp;
-
-            // delete head->previous;
-            head->previous = tail;
         }
+
+        ++size_;
     }
 
     void pushFront(int value) {
+        if (!isValid(value)) {
+            throw std::runtime_error("Wrong Value!");
+        }
+
+        if (head == nullptr) {
+            head = new Node(value);
+            tail = head;
+
+            tail->next = head;
+            head->previous = tail;
+        } else {
+            Node* temp = head;
+            head = new Node(value);
+
+            head->next = temp;
+            temp->previous = head;
+
+            head->previous = tail;
+            tail->next = head;
+        }
+
+        ++size_;
     }
 
-    int pop();
-    int pop(size_t position);
-    void push(int value, size_t position);
+    int pop() {
+        if (head == nullptr) {
+            throw std::runtime_error("Can not pop such element!");
+        }
 
-    Node* head{};
-    Node* tail{};
+        int result;
+
+        --size_;
+
+        if (head == tail) {
+            result = head->data;
+            delete head;
+            head = tail = nullptr;
+
+            return result;
+
+        } else if (head->next == tail) {
+            result = head->data;
+            delete head;
+            head = tail;
+            head->previous = tail;
+            tail->next = head;
+
+            return result;
+        }
+
+        result = head->data;
+
+        Node* new_head = head->next;
+        delete head;
+        head = new_head;
+
+        tail->next = head;
+        head->previous = tail;
+
+        return result;
+    }
+
+    int pop(size_t position) {
+        if (position >= size_ - 1 || position < 0) {
+            throw std::runtime_error("Wrong Position!");
+        }
+
+        --size_;
+        int result;
+
+        if (head->next == tail) {
+            result = head->data;
+            delete head;
+
+            head = tail;
+            head->previous = tail;
+            tail->next = head;
+
+            return result;
+        }
+
+        Node* current = head;
+        if (position != 0) {
+            while (--position) {
+                current = current->next;
+            }
+        }
+
+        Node* to_delete = current->next;
+
+        result = to_delete->data;
+
+        current->next = to_delete->next;
+        to_delete->next->previous = current;
+        if (to_delete == tail) {
+            tail = current;
+            tail->next = head;
+            head->previous = tail;
+        }
+        delete to_delete;
+
+        return result;
+    }
+
+    void push(int value, size_t position) {
+        if (!isValid(value)) {
+            throw std::runtime_error("Wrong Value!");
+        } else if (position >= size_ || position < 0) {
+            throw std::runtime_error("Wrong Position!");
+        }
+
+        Node* current = head;
+        if (position != 0) {
+            while (position--) {
+                current = current->next;
+            }
+        }
+
+        Node* new_next = current->next;
+        Node* new_node = new Node(value);
+
+        current->next = new_node;
+        new_node->previous = current;
+        new_node->next = new_next;
+
+        if (current == tail) {
+            tail = new_node;
+            tail->next = head;
+            head->previous = tail;
+        }
+
+        ++size_;
+    }
+
+    ~List() {
+        Node* temp;
+        while (head != tail) {
+            temp = head;
+            head = head->next;
+            delete temp;
+        }
+        delete head;
+    }
 };
 
 using std::cin;
 using std::cout;
 
+#include <list>
+#include <ctime>
+
 int main() {
-    int* arr = new int[10];
-    for (int i = 0; i < 10; ++i) {
+    int* arr = new int[5];
+    for (int i = 0; i < 5; ++i) {
         arr[i] = i + 1;
     }
 
-    List list;
-    list.pushBack(1);
-    cout << list.head->data << " " << list.tail->data << "\n";
-    list.pushBack(2);
-    list.pushBack(3);
-    list.pushBack(3);
-    list.pushBack(3);
+    std::clock_t start = std::clock();
 
-    // cout << list.head->next->data << "\t";
+    List list(arr, 5);
 
-    //    Node* current = list.head->next;
-    //    cout << list.head->data << "\t";
-    //    while (current != list.head) {
-    //        cout << current->data << "\t";
-    //        current = current->next;
+    for (int i = 0; i < 5; ++i) {
+        list.push(i + 1, 0);
+    }
+
+    //    for (int i = 0; i >= -5; --i) {
+    //        list.pushFront(i);
     //    }
 
-    Node* current = list.head;
+    int index = 0;
+    Node* begin = list.head;
+    while (begin != list.tail) {
+        begin = begin->next;
+        ++index;
+    }
+    ++index;
+    cout << "length: " << index << "\n";
 
-    do {
-        cout << current->data << "\t";
-        current = current->next;
-    } while (current != list.tail);
+    // 1	5	4	3	2	1	2	3	4	5
+    for (int i = 0; i < index - 1; ++i) {
+        cout << list.pop(0) << "\t";
+    }
+    cout << list.pop() << "\n";
+
+    std::clock_t end = std::clock();
+    std::cout << "CPU time used: " << 1000.0 * (end - start) / CLOCKS_PER_SEC << " ms\n";
 
     return 0;
 }
