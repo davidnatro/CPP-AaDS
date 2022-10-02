@@ -56,11 +56,11 @@ public:
             Node* temp = tail;
             tail = new Node(value);
 
-            tail->next = head;
-            head->previous = tail;
-
             temp->next = tail;
             tail->previous = temp;
+
+            tail->next = head;
+            head->previous = tail;
         }
 
         ++size_;
@@ -97,7 +97,6 @@ public:
         }
 
         int result;
-
         --size_;
 
         if (head == tail) {
@@ -106,13 +105,12 @@ public:
             head = tail = nullptr;
 
             return result;
-
         } else if (head->next == tail) {
             result = head->data;
             delete head;
             head = tail;
-            head->previous = tail;
-            tail->next = head;
+            head->next = tail;
+            tail->previous = head;
 
             return result;
         }
@@ -130,24 +128,14 @@ public:
     }
 
     int pop(size_t position) {
-        if (position >= size_ - 1 || position < 0) {
+        if (position >= size_ - 1 || position < 0 || size_ == 1 || size_ == 0) {
             throw std::runtime_error("Wrong Position!");
         }
 
         --size_;
         int result;
 
-        if (head->next == tail) {
-            result = head->data;
-            delete head;
-
-            head = tail;
-            head->previous = tail;
-            tail->next = head;
-
-            return result;
-        }
-
+        position += 1;
         Node* current = head;
         if (position != 0) {
             while (--position) {
@@ -156,16 +144,14 @@ public:
         }
 
         Node* to_delete = current->next;
-
         result = to_delete->data;
-
         current->next = to_delete->next;
         to_delete->next->previous = current;
+
         if (to_delete == tail) {
             tail = current;
-            tail->next = head;
-            head->previous = tail;
         }
+
         delete to_delete;
 
         return result;
@@ -179,8 +165,9 @@ public:
         }
 
         Node* current = head;
+        position += 1;
         if (position != 0) {
-            while (position--) {
+            while (--position) {
                 current = current->next;
             }
         }
@@ -189,8 +176,9 @@ public:
         Node* new_node = new Node(value);
 
         current->next = new_node;
-        new_node->previous = current;
         new_node->next = new_next;
+        new_next->previous = new_node;
+        new_node->previous = current;
 
         if (current == tail) {
             tail = new_node;
@@ -246,13 +234,21 @@ int main() {
     cout << "length: " << index << "\n";
 
     // 1	5	4	3	2	1	2	3	4	5
-    for (int i = 0; i < index - 1; ++i) {
-        cout << list.pop(0) << "\t";
+    for (int i = index; i >= 0; --i) {
+        try {
+            cout << list.pop(i) << "\t";
+        } catch (const std::runtime_error& error) {
+            cout << error.what() << "\n";
+        }
     }
     cout << list.pop() << "\n";
 
     std::clock_t end = std::clock();
     std::cout << "CPU time used: " << 1000.0 * (end - start) / CLOCKS_PER_SEC << " ms\n";
+
+    List list2;
+    list2.pushBack(1);
+    cout << list.pop(0) << "\n";
 
     return 0;
 }
