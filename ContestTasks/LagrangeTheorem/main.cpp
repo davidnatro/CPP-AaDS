@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 using std::cin;
 using std::cout;
@@ -21,24 +20,31 @@ using std::cout;
  */
 
 int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+
     int input;
     cin >> input;
 
-    if (input == 0) {
-        cout << 0;
-        return 0;
-    }
-
     for (int i = 0; i * i <= input; ++i) {
+        if (i * i == input) {
+            cout << i;
+            return 0;
+        }
         for (int j = i; j * j <= input; ++j) {
+            if (i * i + j * j == input) {
+                cout << i << " " << j;
+                return 0;
+            }
             for (int k = j; k * k <= input; ++k) {
+                if (i * i + j * j + k * k == input) {
+                    cout << i << " " << j << " " << k;
+                    return 0;
+                }
                 for (int l = k; l * l <= input; ++l) {
                     if (i * i + j * j + k * k + l * l == input) {
-                        for (const int &element : std::vector<int>{i, j, k, l}) {
-                            if (element != 0) {
-                                cout << element << " ";
-                            }
-                        }
+                        cout << i << " " << j << " " << k << " " << l;
                         return 0;
                     }
                 }
