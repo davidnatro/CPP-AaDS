@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 
 using std::cin;
 using std::cout;
@@ -10,45 +9,58 @@ public:
     }
 
     ~Tree() {
+        if (left_ != nullptr) {
+            delete left_;
+        }
+
+        if (right_ != nullptr) {
+            delete right_;
+        }
     }
 
     void insert(int value) {
         if (left_ == nullptr && right_ == nullptr) {
             data_ = value;
-            right_ = std::shared_ptr<Tree>(new Tree());
-            left_ = std::shared_ptr<Tree>(new Tree());
+            left_ = new Tree();
+            right_ = new Tree();
             return;
         }
 
         if (value > data_) {
             if (right_ == nullptr) {
-                right_ = std::shared_ptr<Tree>(new Tree());
+                right_ = new Tree();
             }
             right_->insert(value);
         } else if (value < data_) {
             if (left_ == nullptr) {
-                left_ = std::shared_ptr<Tree>(new Tree());
+                left_ = new Tree();
             }
             left_->insert(value);
         }
     }
 
     size_t getHeight() const {
-        if (right_ == nullptr && left_ == nullptr) {
+        if (left_ == nullptr && right_ == nullptr) {
             return 0;
         }
 
-        int height_l = right_->getHeight();
-        int height_r = left_->getHeight();
+        int height_l, height_r;
 
+        if (left_ != nullptr) {
+            height_l = left_->getHeight();
+        }
+
+        if (right_ != nullptr) {
+            height_r = right_->getHeight();
+        }
         return (height_r > height_l) ? height_r + 1 : height_l + 1;
     }
 
 private:
     int data_;
 
-    std::shared_ptr<Tree> left_ = nullptr;
-    std::shared_ptr<Tree> right_ = nullptr;
+    Tree* right_ = nullptr;
+    Tree* left_ = nullptr;
 };
 
 int main() {
