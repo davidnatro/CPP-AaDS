@@ -23,22 +23,6 @@ using std::cout;
 using std::vector;
 
 int main() {
-    ListNode *head = new ListNode;
-    head->val = 1;
-    ListNode * temp = head;
-    for (int i = 1; i <= 4; ++i) {
-        temp->next = new ListNode;
-        temp = temp->next;
-        temp->val = i + 1;
-    }
-
-    RemoveNthNodeLL removeNthNodeLl;
-    ListNode *res = removeNthNodeLl.removeNthFromEnd(head, 2);
-    while (res != nullptr) {
-        cout << res->val << "\t";
-        res = res->next;
-    }
-
 
     return 0;
 }
