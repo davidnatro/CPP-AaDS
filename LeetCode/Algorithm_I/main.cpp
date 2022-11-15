@@ -16,12 +16,28 @@
 #include "Day 4/ReverseString.h"
 #include "Day 4/ReverseWordsInAStringIII.h"
 
+#include "Day 5/MiddleOfTheLinkedList.h"
+#include "Day 5/RemoveNthNodeLL.h"
+
 using std::cout;
 using std::vector;
 
 int main() {
-    TwoSumII twoSumIi;
-    vector<int> vec{2, 7, 11, 15};
+    ListNode *head = new ListNode;
+    head->val = 1;
+    ListNode * temp = head;
+    for (int i = 1; i <= 4; ++i) {
+        temp->next = new ListNode;
+        temp = temp->next;
+        temp->val = i + 1;
+    }
+
+    RemoveNthNodeLL removeNthNodeLl;
+    ListNode *res = removeNthNodeLl.removeNthFromEnd(head, 2);
+    while (res != nullptr) {
+        cout << res->val << "\t";
+        res = res->next;
+    }
 
 
     return 0;
