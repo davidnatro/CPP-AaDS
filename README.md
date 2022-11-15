@@ -1,9 +1,9 @@
 # Algorithms and Data Structures
 
 * [AaDS at Higher School of Economics, CS, Software Engineering](HSE)
-  - [Algorithms](Algorithms)
-  - [Data Structures](Data%20Structures)
-  - [Competitive programming](ContestTasks)
+  - [Algorithms](HSE/Algorithms/)
+  - [Data Structures](HSE/Data%20Structures/)
+  - [Competitive programming](HSE/ContestTasks/)
   
 * [LeetCode](LeetCode)
   - Algorithms Study Plan
