@@ -7,13 +7,8 @@ struct Node {
     Node *left = nullptr;
     Node *right = nullptr;
 
-    int height = 0;
+    int height = 1;
     int value;
-
-    ~Node() {
-        delete left;
-        delete right;
-    }
 };
 
 class AVLTree {
@@ -30,17 +25,7 @@ public:
     }
 
     void erase(int value) {
-        Node *current = root_;
-
-        while (current != nullptr) {
-            if (value > current->value) {
-                current = current->right;
-            } else if (value < current->value) {
-                current = current->left;
-            } else {
-                return ;
-            }
-        }
+        root_ = erase(root_, value);
     }
 
     int *find(int value) {
@@ -51,7 +36,9 @@ public:
             } else if (value < current->value) {
                 current = current->left;
             } else {
-                return reinterpret_cast<int *>(current->value);
+                delete find_result_;
+                find_result_ = new int(current->value);
+                return find_result_;
             }
         }
 
@@ -59,17 +46,25 @@ public:
     }
 
     int *traversal() {
-        int *result = new int[getSize()];
-        inOrderToArray(root_, result);
+        delete[] array_;
 
-        return result;
+        if (root_ == nullptr) {
+            return nullptr;
+        }
+
+        array_ = new int[getSize()];
+        inOrderToArray(root_, array_);
+
+        return array_;
     }
 
     int *lowerBound(int value) {
-        int *result;
-        inOrderLowerBound(root_, value, result);
+        delete lower_bound_result_;
+        lower_bound_result_ = nullptr;
 
-        return result;
+        lower_bound_result_ = inOrderLowerBound(root_, value, lower_bound_result_);
+
+        return lower_bound_result_;
     }
 
     bool empty() {
@@ -85,19 +80,36 @@ public:
     }
 
     ~AVLTree() {
-        delete root_;
+        destructor(root_);
+        delete lower_bound_result_;
+        delete[] array_;
+        delete find_result_;
     }
 
 private:
     Node *root_ = nullptr;
+    int *lower_bound_result_ = nullptr;
+    int *array_ = nullptr;
+    int *find_result_ = nullptr;
+
+    void destructor(Node *node) {
+        if (node == nullptr) {
+            return;
+        }
+
+        destructor(node->left);
+        destructor(node->right);
+
+        delete node;
+    }
 
     size_t getHeight(const Node *node) const {
         if (node == nullptr) {
             return 0;
         }
 
-        int height_l = 1;
-        int height_r = 1;
+        int height_l = 0;
+        int height_r = 0;
 
         if (node->left != nullptr) {
             height_l = getHeight(node->left);
@@ -172,17 +184,62 @@ private:
     }
 
     Node *erase(Node *node, const int value) {
-        Node *current = node;
+        if (node == nullptr) {
+            return nullptr;
+        }
 
-        while (current != nullptr) {
-            if (value > current->value) {
-                current = current->right;
-            } else if (value < current->value) {
-                current = current->left;
-            } else {
+        if (value > node->value) {
+            node->right = erase(node->right, value);
+        } else if (value < node->value) {
+            node->left = erase(node->left, value);
+        } else {
+            if (node->left == nullptr && node->right == nullptr) {
+                delete node;
                 return nullptr;
             }
+
+            if (node->right == nullptr || node->left == nullptr) {
+                Node *current;
+                if (node->right != nullptr) {
+                    current = node->right;
+                    delete node;
+                    node = current;
+                } else if (node->left != nullptr) {
+                    current = node->left;
+                    delete node;
+                    node = current;
+                }
+            } else if (node->right != nullptr && node->left != nullptr) {
+                if (node->right != nullptr && node->left != nullptr) {
+                    Node *current = node->right;
+                    while (current->left != nullptr) {
+                        current = current->left;
+                    }
+
+                    node->value = current->value;
+                    node->right = erase(node->right, current->value);
+                }
+            }
         }
+
+        node->height = getHeight(node);
+
+        int balance = factorBalance(node);
+        if (balance >= 2) {
+            if (factorBalance(node->left) < 0) {
+                return bigRight(node);
+            } else if (factorBalance(node->left) >= 0) {
+                return smallRight(node);
+            }
+        } else if (balance <= -2) {
+            if (factorBalance(node->right) <= 0) {
+                return smallLeft(node);
+            } else if (factorBalance(node->right) > 0) {
+                return bigLeft(node);
+            }
+        }
+
+        return node;
     }
 
     Node *smallLeft(Node *a) {
@@ -227,23 +284,33 @@ private:
         return smallRight(node);
     }
 
-    void inOrderLowerBound(const Node *node, int value, int *result) const {
+    int *inOrderLowerBound(const Node *node, int value, int *result) {
         if (node == nullptr) {
-            return;
+            return nullptr;
         }
 
         if (node->left != nullptr) {
-            inOrderLowerBound(node->left, value, result);
+            result = inOrderLowerBound(node->left, value, result);
         }
 
         if (node->value >= value) {
-            result = reinterpret_cast<int *>(node->value);
-            return;
+            if (result != nullptr) {
+                if (node->value < *result) {
+                    delete result;
+                    result = new int(node->value);
+                    return result;
+                }
+            } else {
+                result = new int(node->value);
+                return result;
+            }
         }
 
         if (node->right != nullptr) {
-            inOrderLowerBound(node->right, value, result);
+            result = inOrderLowerBound(node->right, value, result);
         }
+
+        return result;
     }
 
     void inOrderToArray(const Node *node, int *array) const {
@@ -274,6 +341,14 @@ int main() {
     tree->insert(0);
     tree->insert(4);
     tree->insert(5);
+
+    int size = tree->getSize();
+    int *arr = tree->traversal();
+
+    for (int i = 0; i < size; ++i) {
+        cout << arr[i] << "\t";
+    }
+    cout << "\n";
 
     cout << "size: " << tree->getSize() << "\n";
     cout << "height: " << tree->getHeight();
