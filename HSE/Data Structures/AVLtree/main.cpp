@@ -6,7 +6,6 @@ using std::cout;
 struct Node {
     Node *left = nullptr;
     Node *right = nullptr;
-    // Node *parent = nullptr;
 
     int height = 0;
     int value;
@@ -30,26 +29,49 @@ public:
         root_ = insert(root_, value);
     }
 
-    // TODO
     void erase(int value) {
+        Node *current = root_;
+
+        while (current != nullptr) {
+            if (value > current->value) {
+                current = current->right;
+            } else if (value < current->value) {
+                current = current->left;
+            } else {
+                return ;
+            }
+        }
     }
 
-    // TODO
     int *find(int value) {
-        return new int[0];
+        Node *current = root_;
+        while (current != nullptr) {
+            if (value > current->value) {
+                current = current->right;
+            } else if (value < current->value) {
+                current = current->left;
+            } else {
+                return reinterpret_cast<int *>(current->value);
+            }
+        }
+
+        return nullptr;
     }
 
-    // TODO
     int *traversal() {
-        return new int[0];
+        int *result = new int[getSize()];
+        inOrderToArray(root_, result);
+
+        return result;
     }
 
-    // TODO
     int *lowerBound(int value) {
-        return new int[0];
+        int *result;
+        inOrderLowerBound(root_, value, result);
+
+        return result;
     }
 
-    // TODO
     bool empty() {
         return root_ == nullptr;
     }
@@ -69,7 +91,7 @@ public:
 private:
     Node *root_ = nullptr;
 
-    size_t getHeight(Node *node) const {
+    size_t getHeight(const Node *node) const {
         if (node == nullptr) {
             return 0;
         }
@@ -87,7 +109,7 @@ private:
         return (height_r > height_l) ? height_r + 1 : height_l + 1;
     }
 
-    int size(Node *node) const {
+    int size(const Node *node) const {
         if (node == nullptr) {
             return 0;
         }
@@ -113,7 +135,7 @@ private:
         return l - r;
     }
 
-    Node *insert(Node *node, int value) {
+    Node *insert(Node *node, const int value) {
         if (node == nullptr) {
             node = new Node();
             node->value = value;
@@ -147,6 +169,20 @@ private:
         }
 
         return node;
+    }
+
+    Node *erase(Node *node, const int value) {
+        Node *current = node;
+
+        while (current != nullptr) {
+            if (value > current->value) {
+                current = current->right;
+            } else if (value < current->value) {
+                current = current->left;
+            } else {
+                return nullptr;
+            }
+        }
     }
 
     Node *smallLeft(Node *a) {
@@ -189,6 +225,42 @@ private:
     Node *bigRight(Node *node) {
         node->left = smallLeft(node->left);
         return smallRight(node);
+    }
+
+    void inOrderLowerBound(const Node *node, int value, int *result) const {
+        if (node == nullptr) {
+            return;
+        }
+
+        if (node->left != nullptr) {
+            inOrderLowerBound(node->left, value, result);
+        }
+
+        if (node->value >= value) {
+            result = reinterpret_cast<int *>(node->value);
+            return;
+        }
+
+        if (node->right != nullptr) {
+            inOrderLowerBound(node->right, value, result);
+        }
+    }
+
+    void inOrderToArray(const Node *node, int *array) const {
+        static int index = 0;
+        if (node == nullptr) {
+            return;
+        }
+
+        if (node->left != nullptr) {
+            inOrderToArray(node->left, array);
+        }
+
+        array[index++] = node->value;
+
+        if (node->right != nullptr) {
+            inOrderToArray(node->right, array);
+        }
     }
 };
 
