@@ -31,7 +31,10 @@ public:
             return false;
         }
 
-        return isRb(root_);
+        bool balance = true;
+        isBalanced(root_, balance);
+
+        return isRb(root_) && balance;
     }
 
     ~RBTree() {
@@ -41,8 +44,12 @@ public:
 private:
     Node *root_ = nullptr;
 
-    bool isRb(Node *root) const {
-        bool result = true;
+    bool isRb(const Node *root) const {
+        bool result;
+
+        if (root == nullptr) {
+            return true;
+        }
 
         if (root->left != nullptr) {
             if (root->key < root->left->key) {
@@ -64,43 +71,53 @@ private:
             return false;
         }
 
-        int minh, maxh;
-        if (!isBalanced(root, maxh, minh)) {
-            return false;
-        }
-
         return result;
     }
 
-    bool isBalanced(Node *root, int &maxh, int &minh) const {
+    int isBalanced(Node *root, bool &result) const {
         if (root == nullptr) {
-            maxh = minh = 0;
-            return true;
+            return 0;
         }
 
-        int lmxh, lmnh;  // To store max and min heights of left subtree
-        int rmxh, rmnh;  // To store max and min heights of right subtree
+        int l = isBalanced(root->left, result);
+        int r = isBalanced(root->right, result);
 
-        // Check if left subtree is balanced, also set lmxh and lmnh
-        if (!isBalanced(root->left, lmxh, lmnh)) {
-            return false;
+        if (l + 1 > 2 * (r + 1)) {
+            result = false;
         }
 
-        // Check if right subtree is balanced, also set rmxh and rmnh
-        if (!isBalanced(root->right, rmxh, rmnh)) {
-            return false;
+        if (r + 1 > 2 * (l + 1)) {
+            result = false;
         }
 
-        // Set the max and min heights of this node for the parent call
-        maxh = (lmxh > rmxh) ? lmxh + 1 : rmxh + 1;
-        minh = (lmnh < rmnh) ? lmnh + 1 : rmnh + 1;
+        return (l > r) ? l + 1 : r + 1;
+    }
 
-        // See if this node is balanced
-        if (maxh <= 2 * minh) {
-            return true;
+    bool red(const Node *root) const {
+        bool result = false;
+        if (root->left != nullptr) {
+            result = red(root->left);
         }
 
-        return false;
+        if (root->right != nullptr) {
+            result = red(root->right);
+        }
+
+        if (root->color == R) {
+            if (root->left != nullptr) {
+                if (root->color == root->left->color) {
+                    return true;
+                }
+            }
+
+            if (root->right != nullptr) {
+                if (root->color == root->right->color) {
+                    return true;
+                }
+            }
+        }
+
+        return result;
     }
 
     bool redSeries(const Node *node) const {
@@ -138,9 +155,6 @@ private:
     }
 };
 
-#include <fstream>
-std::ifstream f_in("../inputs/input_3");
-
 using std::cin;
 using std::cout;
 
@@ -167,90 +181,100 @@ Node *build(Node *root, const std::vector<Node *> &nodes) {
     return root;
 }
 
+#include <fstream>
+
 int main() {
     std::ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    cin.rdbuf(f_in.rdbuf());  // delete
+    std::string inp = "../inputs/input_";
+    for (int i = 1; i <= 5; ++i) {
+        std::string path = inp + std::to_string(i);
+        std::ifstream f_in(path);
 
-    // Размер дерева.
-    uint16_t size;
-    cin >> size;
+        cin.rdbuf(f_in.rdbuf());  // delete
 
-    // NO, если размер == 0.
-    if (size == 0) {
-        cout << "NO";
-        return 0;
-    }
+        // Размер дерева.
+        uint16_t size;
+        cin >> size;
 
-    // Номер корневой вершины.
-    uint16_t root_index;
-    cin >> root_index;
-
-    std::vector<Node *> nodes;
-
-    RBTree *tree = new RBTree();
-
-    std::string input;
-    for (int i = 0; i < size; ++i) {
-        int number, key;
-
-        cin >> number;
-        cin >> key;
-
-        Node *node = findNode(nodes, number);
-        if (node == nullptr) {
-            node = new Node();
-            node->number = number;
+        // NO, если размер == 0.
+        if (size == 0) {
+            cout << "NO";
+            return 0;
         }
 
-        node->key = key;
-        nodes.emplace_back(node);
+        // Номер корневой вершины.
+        uint16_t root_index;
+        cin >> root_index;
 
-        cin >> input;
-        if (input == "null") {
-            node->left = nullptr;
+        std::vector<Node *> nodes;
+
+        RBTree *tree = new RBTree();
+
+        std::string input;
+        for (int i = 0; i < size; ++i) {
+            int number, key;
+
+            cin >> number;
+            cin >> key;
+
+            Node *node = findNode(nodes, number);
+            if (node == nullptr) {
+                node = new Node();
+                node->number = number;
+            }
+
+            node->key = key;
+            nodes.emplace_back(node);
+
+            cin >> input;
+            if (input == "null") {
+                node->left = nullptr;
+            } else {
+                node->left = new Node();
+                nodes.emplace_back(node->left);
+                node->left->number = std::stoi(input);
+            }
+
+            cin >> input;
+            if (input == "null") {
+                node->right = nullptr;
+            } else {
+                node->right = new Node();
+                nodes.emplace_back(node->right);
+                node->right->number = std::stoi(input);
+            }
+
+            cin >> input;
+            if (input == "R") {
+                node->color = R;
+            } else {
+                node->color = B;
+            }
+        }
+
+        Node *root_node;
+        for (int i = 0; i < size; ++i) {
+            if (nodes[i]->number == root_index) {
+                root_node = nodes[i];
+                break;
+            }
+        }
+
+        root_node = build(root_node, nodes);
+
+        tree->insert(root_node);
+        if (tree->isRBTree()) {
+            cout << "YES";
         } else {
-            node->left = new Node();
-            nodes.emplace_back(node->left);
-            node->left->number = std::stoi(input);
+            cout << "NO";
         }
 
-        cin >> input;
-        if (input == "null") {
-            node->right = nullptr;
-        } else {
-            node->right = new Node();
-            nodes.emplace_back(node->right);
-            node->right->number = std::stoi(input);
-        }
+        delete tree;
 
-        cin >> input;
-        if (input == "R") {
-            node->color = R;
-        } else {
-            node->color = B;
-        }
+        cout << "\n";
     }
-
-    Node *root_node;
-    for (int i = 0; i < size; ++i) {
-        if (nodes[i]->number == root_index) {
-            root_node = nodes[i];
-            break;
-        }
-    }
-
-    root_node = build(root_node, nodes);
-
-    tree->insert(root_node);
-    if (tree->isRBTree()) {
-        cout << "YES";
-    } else {
-        cout << "NO";
-    }
-
-    delete tree;
 
     return 0;
 }
