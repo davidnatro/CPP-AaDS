@@ -35,108 +35,132 @@ public:
     }
 
     ~RBTree() {
+        destruct(root_);
     }
 
 private:
     Node *root_ = nullptr;
 
     bool isRb(Node *root) const {
+        bool result = true;
+
         if (root->left != nullptr) {
-            if ((root->color == R && root->left->color == R) || root->key < root->left->key) {
+            if (root->key < root->left->key) {
                 return false;
             }
 
-            return isRb(root->left);
+            result = isRb(root->left);
         }
 
         if (root->right != nullptr) {
-            if ((root->color == R && root->right->color == R) || root->key > root->right->key) {
+            if (root->key > root->right->key) {
                 return false;
             }
 
-            return isRb(root->right);
+            result = isRb(root->right);
         }
 
-        bool balanced = true;
-        isBalanced(root, &balanced);
+        if (redSeries(root)) {
+            return false;
+        }
 
-        return balanced;
+        int minh, maxh;
+        if (!isBalanced(root, maxh, minh)) {
+            return false;
+        }
+
+        return result;
     }
 
-    int isBalanced(Node *root, bool *balance) const {
+    bool isBalanced(Node *root, int &maxh, int &minh) const {
         if (root == nullptr) {
-            return 0;
+            maxh = minh = 0;
+            return true;
         }
 
-        int l = isBalanced(root->left, balance);
-        int r = isBalanced(root->right, balance);
+        int lmxh, lmnh;  // To store max and min heights of left subtree
+        int rmxh, rmnh;  // To store max and min heights of right subtree
 
-        if ((l + 1) > 2 * (r + 1)) {
-            *balance = false;
+        // Check if left subtree is balanced, also set lmxh and lmnh
+        if (!isBalanced(root->left, lmxh, lmnh)) {
+            return false;
         }
 
-        if ((r + 1) > 2 * (l + 1)) {
-            *balance = false;
+        // Check if right subtree is balanced, also set rmxh and rmnh
+        if (!isBalanced(root->right, rmxh, rmnh)) {
+            return false;
         }
 
-        return (l > r) ? l + 1 : r + 1;
+        // Set the max and min heights of this node for the parent call
+        maxh = (lmxh > rmxh) ? lmxh + 1 : rmxh + 1;
+        minh = (lmnh < rmnh) ? lmnh + 1 : rmnh + 1;
+
+        // See if this node is balanced
+        if (maxh <= 2 * minh) {
+            return true;
+        }
+
+        return false;
     }
 
-    int getMaxHeight(const Node *node) const {
+    bool redSeries(const Node *node) const {
         if (node == nullptr) {
-            return 0;
+            return false;
         }
 
-        int height_l = 0;
-        int height_r = 0;
+        if (node->color == R) {
+            if (node->left != nullptr) {
+                if (node->color == node->left->color) {
+                    return true;
+                }
+            }
 
-        if (node->left != nullptr) {
-            height_l = getMaxHeight(node->left);
+            if (node->right != nullptr) {
+                if (node->color == node->right->color) {
+                    return true;
+                }
+            }
         }
 
-        if (node->right != nullptr) {
-            height_r = getMaxHeight(node->right);
-        }
-        return (height_r > height_l) ? height_r + 1 : height_l + 1;
+        return false;
     }
 
-    int getMinHeight(const Node *node) const {
-        if (node == nullptr) {
-            return 0;
+    void destruct(Node *root) {
+        if (root->left != nullptr) {
+            destruct(root->left);
         }
 
-        if (node->right == nullptr && node->left == nullptr) {
-            return 0;
+        if (root->right != nullptr) {
+            destruct(root->right);
         }
 
-        int height_l = INT32_MAX;
-        int height_r = INT32_MAX;
-
-        if (node->left != nullptr) {
-            height_l = getMinHeight(node->left);
-        }
-
-        if (node->right != nullptr) {
-            height_r = getMinHeight(node->right);
-        }
-        return (height_r < height_l) ? height_r + 1 : height_l + 1;
+        delete root;
     }
 };
 
-#include <fstream>                        // delete
-std::ifstream f_in("../inputs/input_4");  // delete
+#include <fstream>
+std::ifstream f_in("../inputs/input_3");
 
 using std::cin;
 using std::cout;
 
+Node *findNode(const std::vector<Node *> nodes, int number) {
+    for (size_t i = 0; i < nodes.size(); ++i) {
+        if (nodes[i]->number == number) {
+            return nodes[i];
+        }
+    }
+    return nullptr;
+}
+
 Node *build(Node *root, const std::vector<Node *> &nodes) {
     if (root->left != nullptr) {
-        root->left = nodes[root->left->number - 1];
+        root->left = findNode(nodes, root->left->number);
         root->left = build(root->left, nodes);
     }
 
     if (root->right != nullptr) {
-        root->right = nodes[root->right->number - 1];
+        root->right = findNode(nodes, root->right->number);
         root->right = build(root->right, nodes);
     }
 
@@ -160,27 +184,35 @@ int main() {
     }
 
     // Номер корневой вершины.
-    uint16_t rootIndex;
-    cin >> rootIndex;
+    uint16_t root_index;
+    cin >> root_index;
 
-    std::vector<Node *> nodes(size);
+    std::vector<Node *> nodes;
 
     RBTree *tree = new RBTree();
 
     std::string input;
     for (int i = 0; i < size; ++i) {
-        Node *node = new Node();
-        nodes[i] = node;
+        int number, key;
 
-        cin >> node->number;
-        cin >> node->key;
+        cin >> number;
+        cin >> key;
+
+        Node *node = findNode(nodes, number);
+        if (node == nullptr) {
+            node = new Node();
+            node->number = number;
+        }
+
+        node->key = key;
+        nodes.emplace_back(node);
 
         cin >> input;
         if (input == "null") {
             node->left = nullptr;
         } else {
             node->left = new Node();
-            nodes[++i] = node->left;
+            nodes.emplace_back(node->left);
             node->left->number = std::stoi(input);
         }
 
@@ -189,7 +221,7 @@ int main() {
             node->right = nullptr;
         } else {
             node->right = new Node();
-            nodes[++i] = node->right;
+            nodes.emplace_back(node->right);
             node->right->number = std::stoi(input);
         }
 
@@ -203,9 +235,9 @@ int main() {
 
     Node *root_node;
     for (int i = 0; i < size; ++i) {
-        if (nodes[i]->number == rootIndex) {
+        if (nodes[i]->number == root_index) {
             root_node = nodes[i];
-            break ;
+            break;
         }
     }
 
@@ -216,10 +248,6 @@ int main() {
         cout << "YES";
     } else {
         cout << "NO";
-    }
-
-    for (int i = 0; i < size; ++i) {
-        delete nodes[i];
     }
 
     delete tree;
