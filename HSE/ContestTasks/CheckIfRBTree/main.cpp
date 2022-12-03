@@ -10,7 +10,7 @@ struct Node {
 
     Node *left = nullptr;
     Node *right = nullptr;
-    Color color = B;
+    Color color = R;
 };
 
 class RBTree {
@@ -22,7 +22,7 @@ public:
         root_ = node;
     }
 
-    bool isRBTree() const {
+    bool isRBTree() {
         if (root_ == nullptr) {
             return true;
         }
@@ -34,7 +34,11 @@ public:
         bool balance = true;
         isBalanced(root_, balance);
 
-        return isRb(root_) && balance;
+        //        std::cout << std::boolalpha << "red: " << red(root_) << "\n";
+        //        std::cout << std::boolalpha << "balance: " << balance << "\n";
+        //        std::cout << std::boolalpha << "is rb: " << isRb(root_) << "\n";
+
+        return isRb(root_) && balance && !red(root_);
     }
 
     ~RBTree() {
@@ -44,34 +48,48 @@ public:
 private:
     Node *root_ = nullptr;
 
-    bool isRb(const Node *root) const {
-        bool result;
-
+    bool isRb(Node *root) {
         if (root == nullptr) {
             return true;
         }
 
+        bool left = isRb(root->left);
+
+        bool right = isRb(root->right);
+
+        if (root->left != nullptr && root->right != nullptr) {
+            if (root->left->color == B && root->right->color == B && root->color == R) {
+                root->color = B;
+                root->left->color = R;
+                root->right->color = R;
+            }
+        }
+
         if (root->left != nullptr) {
-            if (root->key < root->left->key) {
+            if (root->key <= root->left->key) {
                 return false;
             }
 
-            result = isRb(root->left);
+            if (root->left->left == nullptr && root->left->right == nullptr) {
+                if (root->color == R) {
+                    return false;
+                }
+            }
         }
 
         if (root->right != nullptr) {
-            if (root->key > root->right->key) {
+            if (root->key >= root->right->key) {
                 return false;
             }
 
-            result = isRb(root->right);
+            if (root->right->left == nullptr && root->right->right == nullptr) {
+                if (root->color == R) {
+                    return false;
+                }
+            }
         }
 
-        if (redSeries(root)) {
-            return false;
-        }
-
-        return result;
+        return left && right;
     }
 
     int isBalanced(Node *root, bool &result) const {
@@ -94,14 +112,12 @@ private:
     }
 
     bool red(const Node *root) const {
-        bool result = false;
-        if (root->left != nullptr) {
-            result = red(root->left);
+        if (root == nullptr) {
+            return false;
         }
 
-        if (root->right != nullptr) {
-            result = red(root->right);
-        }
+        bool left = red(root->left);
+        bool right = red(root->right);
 
         if (root->color == R) {
             if (root->left != nullptr) {
@@ -117,29 +133,7 @@ private:
             }
         }
 
-        return result;
-    }
-
-    bool redSeries(const Node *node) const {
-        if (node == nullptr) {
-            return false;
-        }
-
-        if (node->color == R) {
-            if (node->left != nullptr) {
-                if (node->color == node->left->color) {
-                    return true;
-                }
-            }
-
-            if (node->right != nullptr) {
-                if (node->color == node->right->color) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return left || right;
     }
 
     void destruct(Node *root) {
@@ -188,8 +182,8 @@ int main() {
     cin.tie(nullptr);
 
     std::string inp = "../inputs/input_";
-    for (int i = 1; i <= 5; ++i) {
-        std::string path = inp + std::to_string(i);
+    for (int j = 1; j <= 5; ++j) {
+        std::string path = inp + std::to_string(j);
         std::ifstream f_in(path);
 
         cin.rdbuf(f_in.rdbuf());  // delete
@@ -226,25 +220,26 @@ int main() {
             }
 
             node->key = key;
-            nodes.emplace_back(node);
 
             cin >> input;
             if (input == "null") {
                 node->left = nullptr;
             } else {
                 node->left = new Node();
-                nodes.emplace_back(node->left);
                 node->left->number = std::stoi(input);
+                nodes.emplace_back(node->left);
             }
+            input.clear();
 
             cin >> input;
             if (input == "null") {
                 node->right = nullptr;
             } else {
                 node->right = new Node();
-                nodes.emplace_back(node->right);
                 node->right->number = std::stoi(input);
+                nodes.emplace_back(node->right);
             }
+            input.clear();
 
             cin >> input;
             if (input == "R") {
@@ -252,18 +247,16 @@ int main() {
             } else {
                 node->color = B;
             }
+            input.clear();
+
+            nodes.emplace_back(node);
         }
 
-        Node *root_node;
-        for (int i = 0; i < size; ++i) {
-            if (nodes[i]->number == root_index) {
-                root_node = nodes[i];
-                break;
-            }
-        }
+        Node *root_node = findNode(nodes, root_index);
 
         root_node = build(root_node, nodes);
 
+        cout.flush();
         tree->insert(root_node);
         if (tree->isRBTree()) {
             cout << "YES";
