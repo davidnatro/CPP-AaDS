@@ -1,0 +1,28 @@
+    bool isBalanced(const Node *root, int &max, int &min) const {
+        if (root == nullptr) {
+            max = min = 0;
+            return true;
+        }
+
+        int lmxh, lmnh;
+        int rmxh, rmnh;
+
+        if (!isBalanced(root->left, lmxh, lmnh)) {
+            return false;
+        }
+
+        if (!isBalanced(root->right, rmxh, rmnh)) {
+            return false;
+        }
+
+        max = (lmxh > rmxh) ? lmxh + 1 : rmxh + 1;
+        min = (lmnh < rmnh) ? lmnh + 1 : rmnh + 1;
+
+        return max <= 2 * min;
+    }
+
+
+3 1
+1 1 2 3 R
+2 2 null null B
+3 3 null null B
