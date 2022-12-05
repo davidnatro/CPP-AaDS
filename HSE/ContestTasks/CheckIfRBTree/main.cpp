@@ -99,7 +99,7 @@ public:
     }
 
     ~RBTree() {
-        destruct(root_);
+        // destruct(root_);
     }
 
 private:
@@ -224,7 +224,7 @@ int main() {
     //        cin.rdbuf(f_in.rdbuf());  // delete
 
     // Размер дерева.
-    uint16_t size;
+    int size;
     cin >> size;
 
     // NO, если размер == 0.
@@ -234,7 +234,7 @@ int main() {
     }
 
     // Номер корневой вершины.
-    uint16_t root_index;
+    int root_index;
     cin >> root_index;
 
     std::vector<Node *> nodes;
@@ -252,6 +252,7 @@ int main() {
         if (node == nullptr) {
             node = new Node();
             node->number = number;
+            nodes.emplace_back(node);
         }
 
         node->key = key;
@@ -280,8 +281,6 @@ int main() {
         } else {
             node->color = B;
         }
-
-        nodes.emplace_back(node);
     }
 
     Node *root_node = findNode(nodes, root_index);
@@ -310,9 +309,11 @@ int main() {
         cout << "NO";
     }
 
+    for (int i = 0; i < nodes.size(); ++i) {
+        delete nodes[i];
+    }
     delete tree;
-    // delete tree;
-    //
+
     //        cout << "\n";
     //    }
 
