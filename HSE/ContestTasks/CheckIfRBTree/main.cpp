@@ -16,7 +16,7 @@ struct Node {
     Color color = R;
 };
 
-Node *findNode(const std::vector<Node *> nodes, int number) {
+Node *findNode(const std::vector<Node *> &nodes, const int number) {
     for (size_t i = 0; i < nodes.size(); ++i) {
         if (nodes[i]->number == number) {
             return nodes[i];
@@ -28,10 +28,6 @@ Node *findNode(const std::vector<Node *> nodes, int number) {
 class RBTree {
 public:
     RBTree() {
-    }
-
-    void insert(Node *root) {
-        root_ = root;
     }
 
     bool isRBTree(Node *root, const std::vector<Node *> &nodes) const {
@@ -88,10 +84,6 @@ public:
             }
         }
 
-        //        if (red(root)) {
-        //            return false;
-        //        }
-
         bool balance = true;
         isBalanced(root, balance);
 
@@ -102,77 +94,6 @@ public:
     }
 
 private:
-    Node *root_ = nullptr;
-
-    bool isRb(Node *root) {
-        if (root == nullptr) {
-            return true;
-        }
-
-        bool left = isRb(root->left);
-
-        bool right = isRb(root->right);
-
-        if (root->left != nullptr && root->right != nullptr) {
-            if (root->left->color == B && root->right->color == B && root->color == R) {
-                root->color = B;
-                root->left->color = R;
-                root->right->color = R;
-            }
-        }
-
-        if (root->left != nullptr) {
-            if (root->key <= root->left->key) {
-                return false;
-            }
-
-            if (root->left->left == nullptr && root->left->right == nullptr) {
-                if (root->color == R) {
-                    return false;
-                }
-            }
-        }
-
-        if (root->right != nullptr) {
-            if (root->key >= root->right->key) {
-                return false;
-            }
-
-            if (root->right->left == nullptr && root->right->right == nullptr) {
-                if (root->color == R) {
-                    return false;
-                }
-            }
-        }
-
-        return left && right;
-    }
-
-    bool red(const Node *root) const {
-        if (root == nullptr) {
-            return false;
-        }
-
-        if (root->color == R) {
-            if (root->left != nullptr) {
-                if (root->color == root->left->color) {
-                    return true;
-                }
-            }
-
-            if (root->right != nullptr) {
-                if (root->color == root->right->color) {
-                    return true;
-                }
-            }
-        }
-
-        bool left = red(root->left);
-        bool right = red(root->right);
-
-        return left || right;
-    }
-
     int isBalanced(const Node *root, bool &result) const {
         if (root == nullptr) {
             return 0;
@@ -191,22 +112,6 @@ private:
 
         return (l > r) ? l + 1 : r + 1;
     }
-
-    void destruct(Node *root) {
-        if (root_ == nullptr) {
-            return;
-        }
-
-        if (root->left != nullptr) {
-            destruct(root->left);
-        }
-
-        if (root->right != nullptr) {
-            destruct(root->right);
-        }
-
-        delete root;
-    }
 };
 
 // #include <fstream>
@@ -215,7 +120,6 @@ int main() {
     std::ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    //    std::string inp = "../inputs/input_";
     //    for (int j = 1; j <= 5; ++j) {
     //        std::string path = inp + std::to_string(j);
     //        std::ifstream f_in(path);
@@ -280,12 +184,18 @@ int main() {
         } else {
             node->color = B;
         }
+
+        cout.flush();
     }
 
     Node *root_node = findNode(nodes, root_index);
 
     if (root_node == nullptr) {
         cout << "YES";
+        // ?
+        for (int i = 0; i < nodes.size(); ++i) {
+            delete nodes[i];
+        }
         delete tree;
         return 0;
     }
@@ -296,13 +206,8 @@ int main() {
             delete nodes[i];
         }
         delete tree;
-
         return 0;
     }
-
-
-    tree->insert(root_node);
-
 
     if (tree->isRBTree(root_node, nodes)) {
         cout << "YES";
