@@ -99,7 +99,6 @@ public:
     }
 
     ~RBTree() {
-        // destruct(root_);
     }
 
 private:
@@ -174,7 +173,7 @@ private:
         return left || right;
     }
 
-    int isBalanced(Node *root, bool &result) const {
+    int isBalanced(const Node *root, bool &result) const {
         if (root == nullptr) {
             return 0;
         }
@@ -210,7 +209,7 @@ private:
     }
 };
 
-#include <fstream>
+// #include <fstream>
 
 int main() {
     std::ios_base::sync_with_stdio(false);
@@ -301,7 +300,9 @@ int main() {
         return 0;
     }
 
+
     tree->insert(root_node);
+
 
     if (tree->isRBTree(root_node, nodes)) {
         cout << "YES";
