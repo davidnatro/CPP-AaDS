@@ -16,15 +16,6 @@ struct Node {
     Color color = R;
 };
 
-Node *findNode(const std::vector<Node *> &nodes, const int number) {
-    for (size_t i = 0; i < nodes.size(); ++i) {
-        if (nodes[i]->number == number) {
-            return nodes[i];
-        }
-    }
-    return nullptr;
-}
-
 class RBTree {
 public:
     RBTree() {
@@ -77,17 +68,8 @@ public:
             }
         }
 
-        bool balance = true;
-        isBalanced(root, balance);
-
-        return left && right && balance;
+        return left && right;
     }
-
-    ~RBTree() {
-    }
-
-private:
-    Node *root_ = nullptr;
 
     int isBalanced(const Node *root, bool &result) const {
         if (root == nullptr) {
@@ -107,6 +89,12 @@ private:
 
         return (l > r) ? l + 1 : r + 1;
     }
+
+    ~RBTree() {
+    }
+
+private:
+    Node *root_ = nullptr;
 };
 
 #include <fstream>
@@ -115,127 +103,121 @@ int main() {
     std::ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    //    std::string inp = "../inputs/input_";
-    //    for (int j = 1; j <= 5; ++j) {
-    //        std::string path = inp + std::to_string(j);
-    //        std::ifstream f_in(path);
-    //
-    //        cin.rdbuf(f_in.rdbuf());  // delete
+    std::string inp = "../inputs/input_";
+    for (int j = 1; j <= 5; ++j) {
+        std::string path = inp + std::to_string(j);
+        std::ifstream f_in(path);
 
-    // Размер дерева.
-    int size;
-    cin >> size;
+        cin.rdbuf(f_in.rdbuf());  // delete
 
-    // NO, если размер == 0.
-    if (size == 0) {
-        cout << "NO";
-        return 0;
-    }
+        // Размер дерева.
+        int size;
+        cin >> size;
 
-    // Номер корневой вершины.
-    int root_index;
-    cin >> root_index;
+        // NO, если размер == 0.
+        if (size == 0) {
+            cout << "NO";
+            return 0;
+        }
 
-    std::vector<Node *> nodes;
+        // Номер корневой вершины.
+        int root_index;
+        cin >> root_index;
 
-    RBTree *tree = new RBTree();
-    Node *root = nullptr;
+        std::vector<Node *> nodes(size, nullptr);
 
-    std::string input;
-    for (int i = 0; i < size; ++i) {
-        Node *node;
+        RBTree *tree = new RBTree();
 
-        int number, key;
+        std::string input;
+        for (int i = 0; i < size; ++i) {
+            int number, key;
+            cin >> number;
+            cin >> key;
+            Node *node;
 
-        cin >> number;
-        cin >> key;
-
-        if (number == root_index) {
-            node = new Node();
-            node->number = number;
-            root = node;
-        } else {
-            node = findNode(nodes, number);
-            if (node == nullptr) {
+            if (nodes[number - 1] == nullptr) {
                 node = new Node();
+                nodes[number - 1] = node;
                 node->number = number;
-                nodes.emplace_back(node);
+            } else {
+                node = nodes[number - 1];
             }
-        }
 
-        node->key = key;
+            node->key = key;
 
-        cin >> input;
-        if (input == "null") {
-            node->left = nullptr;
-        } else {
-            int node_number = std::stoi(input);
-            node->left = findNode(nodes, node_number);
-            if (node->left == nullptr) {
-                node->left = new Node();
-                node->left->number = std::stoi(input);
-                nodes.emplace_back(node->left);
+            cin >> input;
+            if (input == "null") {
+                node->left = nullptr;
+            } else {
+                int node_number = std::stoi(input);
+                node->left = nodes[node_number - 1];
+                if (node->left == nullptr) {
+                    node->left = new Node();
+                    node->left->number = std::stoi(input);
+                    nodes[node_number - 1] = node->left;
+                }
             }
-        }
 
-        cin >> input;
-        if (input == "null") {
-            node->right = nullptr;
-        } else {
-            int node_number = std::stoi(input);
-            node->right = findNode(nodes, node_number);
-            if (node->right == nullptr) {
-                node->right = new Node();
-                node->right->number = std::stoi(input);
-                nodes.emplace_back(node->right);
+            cin >> input;
+            if (input == "null") {
+                node->right = nullptr;
+            } else {
+                int node_number = std::stoi(input);
+                node->right = nodes[node_number - 1];
+                if (node->right == nullptr) {
+                    node->right = new Node();
+                    node->right->number = std::stoi(input);
+                    nodes[node->right->number - 1] = node->right;
+                }
             }
+
+            cin >> input;
+            if (input == "R") {
+                node->color = R;
+            } else {
+                node->color = B;
+            }
+
+            cout.flush();
         }
 
-        cin >> input;
-        if (input == "R") {
-            node->color = R;
+        Node *root = nodes[root_index - 1];
+
+        if (root == nullptr) {
+            cout << "YES";
+            // ?
+            for (int i = 0; i < nodes.size(); ++i) {
+                delete nodes[i];
+            }
+            delete tree;
+            return 0;
+        }
+
+        if (root->color == R) {
+            cout << "NO";
+            for (int i = 0; i < nodes.size(); ++i) {
+                delete nodes[i];
+            }
+            delete tree;
+            return 0;
+        }
+
+        bool balance = true;
+        tree->isBalanced(root, balance);
+
+        if (tree->isRBTree(root) && balance) {
+            cout << "YES";
         } else {
-            node->color = B;
+            cout << "NO";
         }
 
-        cout.flush();
-    }
-
-    if (root == nullptr) {
-        cout << "YES";
-        // ?
         for (int i = 0; i < nodes.size(); ++i) {
             delete nodes[i];
         }
-        delete root;
         delete tree;
-        return 0;
-    }
 
-    if (root->color == R) {
-        cout << "NO";
-        for (int i = 0; i < nodes.size(); ++i) {
-            delete nodes[i];
-        }
-        delete root;
-        delete tree;
-        return 0;
+        cout << "\n";
     }
-
-    if (tree->isRBTree(root)) {
-        cout << "YES";
-    } else {
-        cout << "NO";
-    }
-
-    for (int i = 0; i < nodes.size(); ++i) {
-        delete nodes[i];
-    }
-    delete root;
-    delete tree;
-
-    //        cout << "\n";
-    //    }
 
     return 0;
 }
