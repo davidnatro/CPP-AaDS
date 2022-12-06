@@ -12,6 +12,7 @@ struct Node {
 
     Node *left = nullptr;
     Node *right = nullptr;
+    Node *parent = nullptr;
     Color color = R;
 };
 
@@ -29,13 +30,8 @@ public:
             return true;
         }
 
-        if (root->color == R) {
-            if (root->left != nullptr && root->right != nullptr) {
-                if (root->left->color != B || root->right->color != B) {
-                    return false;
-                }
-            } else if ((root->left != nullptr && root->right == nullptr) ||
-                       (root->left == nullptr && root->right != nullptr)) {
+        if (root->parent != nullptr) {
+            if (root->color == R && root->parent->color == R) {
                 return false;
             }
         }
@@ -58,23 +54,23 @@ public:
         return left && right;
     }
 
-    int isBalanced(const Node *root, bool &result) const {
-        if (root == nullptr) {
-            return 0;
+    int balanced(Node *node, bool &balance) const {
+        if (node == nullptr) {
+            return 1;
         }
 
-        int l = isBalanced(root->left, result);
-        int r = isBalanced(root->right, result);
+        int l = balanced(node->left, balance);
+        int r = balanced(node->right, balance);
 
-        if (l + 1 > 2 * (r + 1)) {
-            result = false;
+        if (l != r) {
+            balance = false;
         }
 
-        if (r + 1 > 2 * (l + 1)) {
-            result = false;
+        if (node->color == B) {
+            return (l > r) ? l + 1 : r + 1;
         }
 
-        return (l > r) ? l + 1 : r + 1;
+        return (l > r) ? l : r;
     }
 
     ~RBTree() {
@@ -130,6 +126,7 @@ int main() {
             node->left = nodes[node_number - 1];
             if (node->left == nullptr) {
                 node->left = new Node();
+                node->left->parent = node;
                 nodes[node_number - 1] = node->left;
             }
         }
@@ -142,6 +139,7 @@ int main() {
             node->right = nodes[node_number - 1];
             if (node->right == nullptr) {
                 node->right = new Node();
+                node->right->parent = node;
                 nodes[node_number - 1] = node->right;
             }
         }
@@ -175,7 +173,7 @@ int main() {
     }
 
     bool balance = true;
-    tree->isBalanced(root, balance);
+    tree->balanced(root, balance);
 
     tree->insert(root);
     if (tree->isRBTree(root) && balance) {
