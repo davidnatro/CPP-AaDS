@@ -51,11 +51,18 @@ public:
 
     T *lowerBound(T key) const {
         T *result = nullptr;
+
         Node<T> *current = root;
 
         while (current != nullptr) {
-            if (key <= current->key) {
-                result = &current->key;
+            if (current->key >= key) {
+                if (result != nullptr) {
+                    if (current->key < *result) {
+                        result = &current->key;
+                    }
+                } else {
+                    result = &current->key;
+                }
             }
             current = current->left;
         }
@@ -95,50 +102,136 @@ private:
         if (root == nullptr) {
             root = new Node<T>();
             root->key = key;
+            root->color = Color::RED;
             return root;
         }
+
+        if (key < node->key) {
+            node->left = insert(node->left, key);
+            node->left->parent = node;
+        } else if (key > node->key) {
+            node->right = insert(node->right, key);
+            node->right->parent = node;
+        } else {
+            return node;
+        }
+
+        // Нода - родитель вставленной
+        if (node->color == Color::BLACK) {
+            return node;
+        }
+
+        Node<T> *brother = getBrother(node);
+        if (brother != nullptr) {
+            if (brother->color == Color::RED) {
+                recolor(node->parent);
+                return node;
+            }
+        }
+
+        Node<T> *inserted_node;
+        if (key > node->key) {
+            inserted_node = node->right;
+        } else if (key < node->key) {
+            inserted_node = node->left;
+        }
+
+        Node<T> *grandparent = getGrandparent(inserted_node);
+        if (inserted_node == inserted_node->parent->right &&
+            inserted_node->parent == grandparent->left) {
+            rotate_left(inserted_node->parent);
+            inserted_node = inserted_node->left;
+        } else if (inserted_node == inserted_node->parent->left &&
+                   inserted_node->parent == grandparent->right) {
+            rotate_right(inserted_node->parent);
+            inserted_node = inserted_node->right;
+        }
+
+        return node;
     }
 
-    Node<T> *smallLeft(Node<T> *a) {
-        if (a == nullptr) {
+    void recolor(Node<T> *node) {
+        if (node->left->color == Color::RED && node->right->color == Color::RED) {
+            node->color = Color::RED;
+            node->left->color == Color::BLACK;
+            node->right->color == Color::BLACK;
+            if (node == root) {
+                node->color == Color::BLACK;
+            }
+        }
+    }
+
+    Node<T> *getBrother(const Node<T> *node) const {
+        if (node->parent == nullptr) {
             return nullptr;
         }
 
-        Node<T> *b = a->right;
-
-        a->right = b->left;
-        b->left = a;
-
-        a->height = getHeight(a);
-        b->height = getHeight(b);
-
-        return b;
+        if (node->parent->left == node) {
+            return node->parent->right;
+        } else {
+            return node->parent->left;
+        }
     }
 
-    Node<T> *smallRight(Node<T> *a) {
-        if (a == nullptr) {
+    Node<T> *getGrandparent(const Node<T> *node) const {
+        if (node == nullptr) {
+            if (node->parent == nullptr) {
+                return nullptr;
+            }
+        }
+
+        return node->parent->parent;
+    }
+
+    Node<T> *getUncle(const Node<T> *node) const {
+        Node<T> *grandparent = getGrandparent(node);
+        if (grandparent == nullptr) {
             return nullptr;
         }
 
-        Node<T> *b = a->left;
-
-        a->left = b->right;
-        b->right = a;
-
-        a->height = getHeight(a);
-        b->height = getHeight(b);
-
-        return b;
+        return (node->parent == grandparent->left) ? grandparent->right : grandparent->left;
     }
 
-    Node<T> *bigLeft(Node<T> *node) {
-        node->right = smallRight(node->right);
-        return smallLeft(node);
+    void rotateLeft(Node<T> *node) {
+        Node<T> *pivot = node->right;
+        pivot->parent = node->parent;
+
+        if (pivot->parent != nullptr) {
+            if (pivot->parent->left == node) {
+                node->parent->left = pivot;
+            } else {
+                node->parent->right = pivot;
+            }
+        }
+
+        node->right = pivot->left;
+        if (node->right != nullptr) {
+            pivot->left->parent = node;
+        }
+
+        node->parent = pivot;
+        pivot->left = node;
     }
 
-    Node<T> *bigRight(Node<T> *node) {
-        node->left = smallLeft(node->left);
-        return smallRight(node);
+    void rotateRight(Node<T> *node) {
+        Node<T> *pivot = node->left;
+        pivot->parent = node->parent;
+
+        if (pivot->parent != nullptr) {
+            if (pivot->parent->left == node) {
+                node->parent->left = pivot;
+            } else {
+                node->parent->right = pivot;
+            }
+        }
+
+        node->left = pivot->right;
+        if (node->left != nullptr) {
+            pivot->right->parent = node;
+        }
+
+        node->parent = pivot;
+        pivot->right = node;
     }
 
     void destroy(Node<T> *node) {
@@ -146,13 +239,8 @@ private:
             return;
         }
 
-        if (node->left != nullptr) {
-            destroy(node->left);
-        }
-
-        if (node->right != nullptr) {
-            destroy(node->right);
-        }
+        destroy(node->left);
+        destroy(node->right);
 
         delete node;
     }
@@ -160,9 +248,13 @@ private:
 
 using std::cin;
 using std::cout;
+#include "Utils.h"
 
 int main() {
     RBTree<int> *rb_tree = new RBTree<int>();
+
+
+
     delete rb_tree;
 
     return 0;
