@@ -1,20 +1,21 @@
 #include <iostream>
-
-enum class Color { RED, BLACK };
-
-template <typename T>
-struct Node {
-    T key;
-    Node *left = nullptr;
-    Node *right = nullptr;
-    Node *parent = nullptr;
-    Color color = Color::RED;
-};
+#include <string>
+#include "CheckRbTree.h"
+// enum class Color { RED, BLACK };
+//
+// template <typename T>
+// struct Node {
+//     T key;
+//     Node *left = nullptr;
+//     Node *right = nullptr;
+//     Node *parent = nullptr;
+//     Color color = Color::RED;
+// };
 
 template <typename T>
 class RBTree {
 public:
-    Node<T> *root{};
+    Node<T> *root = nullptr;
 
     RBTree() {
         root = nullptr;
@@ -23,8 +24,8 @@ public:
     RBTree(std::initializer_list<T> list) {
         size_ = list.size();
 
-        for (int i = 0; i < size_; ++i) {
-            insert(list[i]);
+        for (const T *it = list.begin(); it != list.end(); ++it) {
+            insert(*it);
         }
     }
 
@@ -37,7 +38,7 @@ public:
             return;
         }
 
-        root = insert(root, key);
+        insert(root, key);
         size_ += 1;
     }
 
@@ -85,6 +86,42 @@ public:
         return nullptr;
     }
 
+    void print(const Node<T> *node) const {
+        if (node == nullptr) {
+            return;
+        }
+
+        std::string color = node->color == Color::RED ? "RED" : "BLACK";
+
+        std::string left_color, right_color;
+        if (node->left != nullptr) {
+            left_color = node->left->color == Color::RED ? "RED" : "BLACK";
+        } else {
+            left_color = "null";
+        }
+
+        if (node->right != nullptr) {
+            right_color = node->right->color == Color::RED ? "RED" : "BLACK";
+        } else {
+            right_color = "null";
+        }
+
+        std::cout << node->key << " color: " << color;
+
+        if (node->left != nullptr) {
+            std::cout << " left: " << node->left->key << ";" << left_color << " ; ";
+        }
+
+        if (node->right != nullptr) {
+            std::cout << " right: " << node->right->key << ";" << right_color;
+        }
+
+        std::cout << "\n";
+
+        print(node->left);
+        print(node->right);
+    }
+
     ~RBTree() {
         destroy(root);
     }
@@ -92,104 +129,133 @@ public:
 private:
     int size_ = 0;
 
+    void insert(Node<T> *&root, int key) {
+        Node<T> *node = new Node<T>();
+        node->key = key;
+
+        //        if (root == nullptr) {
+        //            root = node;
+        //            node->color = Color::BLACK;
+        //            return;
+        //        }
+
+        // Find the correct place to insert the new node.
+        Node<T> *current = root;
+        Node<T> *parent = nullptr;
+        while (current != nullptr) {
+            parent = current;
+            if (node->key < current->key) {
+                current = current->left;
+            } else {
+                current = current->right;
+            }
+        }
+
+        // Insert the new node.
+        node->parent = parent;
+        if (node->key < parent->key) {
+            parent->left = node;
+        } else {
+            parent->right = node;
+        }
+
+        // Fix any red-black tree violations.
+        fixTree(root, node);
+    }
+
     void setColor(Node<T> *node, Color color) {
         if (node != nullptr) {
             node->color = color;
         }
     }
 
-    Node<T> *insert(Node<T> *node, int key) {
-        if (root == nullptr) {
-            root = new Node<T>();
-            root->key = key;
-            root->color = Color::RED;
-            return root;
+    // Rotates the given subtree to the left.
+    void rotateLeft(Node<T> *&root, Node<T> *node) {
+        Node<T> *right = node->right;
+        node->right = right->left;
+        if (right->left != nullptr) {
+            right->left->parent = node;
         }
-
-        if (key < node->key) {
-            node->left = insert(node->left, key);
-            node->left->parent = node;
-        } else if (key > node->key) {
-            node->right = insert(node->right, key);
-            node->right->parent = node;
-        } else {
-            return node;
-        }
-
-        // Нода - родитель вставленной
-        if (node->color == Color::BLACK) {
-            return node;
-        }
-
-        Node<T> *brother = getBrother(node);
-        if (brother != nullptr) {
-            if (brother->color == Color::RED) {
-                recolor(node->parent);
-                return node;
-            }
-        }
-
-        Node<T> *inserted_node;
-        if (key > node->key) {
-            inserted_node = node->right;
-        } else if (key < node->key) {
-            inserted_node = node->left;
-        }
-
-        Node<T> *grandparent = getGrandparent(inserted_node);
-        if (inserted_node == inserted_node->parent->right &&
-            inserted_node->parent == grandparent->left) {
-            rotate_left(inserted_node->parent);
-            inserted_node = inserted_node->left;
-        } else if (inserted_node == inserted_node->parent->left &&
-                   inserted_node->parent == grandparent->right) {
-            rotate_right(inserted_node->parent);
-            inserted_node = inserted_node->right;
-        }
-
-        return node;
-    }
-
-    void recolor(Node<T> *node) {
-        if (node->left->color == Color::RED && node->right->color == Color::RED) {
-            node->color = Color::RED;
-            node->left->color == Color::BLACK;
-            node->right->color == Color::BLACK;
-            if (node == root) {
-                node->color == Color::BLACK;
-            }
-        }
-    }
-
-    Node<T> *getBrother(const Node<T> *node) const {
+        right->parent = node->parent;
         if (node->parent == nullptr) {
-            return nullptr;
-        }
-
-        if (node->parent->left == node) {
-            return node->parent->right;
+            root = right;
+        } else if (node->parent->left == node) {
+            node->parent->left = right;
         } else {
-            return node->parent->left;
+            node->parent->right = right;
         }
+        right->left = node;
+        node->parent = right;
     }
 
-    Node<T> *getGrandparent(const Node<T> *node) const {
-        if (node == nullptr) {
-            if (node->parent == nullptr) {
-                return nullptr;
-            }
+    // Rotates the given subtree to the right.
+    void rotateRight(Node<T> *&root, Node<T> *node) {
+        Node<T> *left = node->left;
+        node->left = left->right;
+        if (left->right != nullptr) {
+            left->right->parent = node;
         }
-
-        return node->parent->parent;
+        left->parent = node->parent;
+        if (node->parent == nullptr) {
+            root = left;
+        } else if (node->parent->right == node) {
+            node->parent->right = left;
+        } else {
+            node->parent->left = left;
+        }
+        left->right = node;
+        node->parent = left;
     }
 
-    Node<T> *getUncle(const Node<T> *node) const {
-        Node<T> *grandparent = getGrandparent(node);
-        if (grandparent == nullptr) {
-            return nullptr;
+    void fixTree(Node<T> *&root, Node<T> *node) {
+        // Case 1: the new node is the root.
+        if (node->parent == nullptr) {
+            node->color = Color::BLACK;
+            return;
         }
 
-        return (node->parent == grandparent->left) ? grandparent->right : grandparent->left;
+        // Case 2: the parent of the new node is black.
+        if (node->parent->color == Color::BLACK) {
+            return;
+        }
+
+        // Case 3: the uncle of the new node is red.
+        Node<T> *grandparent = node->parent->parent;
+        Node<T> *uncle = nullptr;
+        if (grandparent->left == node->parent) {
+            uncle = grandparent->right;
+        } else {
+            uncle = grandparent->left;
+        }
+        if (uncle != nullptr && uncle->color == Color::RED) {
+            node->parent->color = Color::BLACK;
+            uncle->color = Color::BLACK;
+            grandparent->color = Color::RED;
+            fixTree(root, grandparent);
+            return;
+        }
+
+        // Case 4: the uncle of the new node is black and the new node is a right child.
+        if (node->parent->right == node && grandparent->left == node->parent) {
+            rotateLeft(node->parent);
+            node = node->left;
+        }
+        // Case 5: the uncle of the new node is black and the new node is a left child.
+        else if (node->parent->left == node && grandparent->right == node->parent) {
+            rotateRight(node->parent);
+            node = node->right;
+        }
+
+        // Case 6: the uncle of the new node is black and the new node is a left child.
+        if (node->parent->left == node) {
+            rotateRight(grandparent);
+        }
+        // Case 7: the uncle of the new node is black and the new node is a right child.
+        else {
+            rotateLeft(grandparent);
+        }
+        node->parent->color = Color::BLACK;
+        grandparent->color = Color::RED;
     }
 
     void rotateLeft(Node<T> *node) {
@@ -234,8 +300,54 @@ private:
         pivot->right = node;
     }
 
+    void recolor(Node<T> *node) {
+        if (node == nullptr) {
+            return;
+        }
+
+        if (node->left->color == Color::RED && node->right->color == Color::RED) {
+            setColor(node, Color::RED);
+            setColor(node->left, Color::BLACK);
+            setColor(node->right, Color::BLACK);
+            if (node == root) {
+                setColor(node, Color::BLACK);
+            }
+        }
+    }
+
+    Node<T> *getBrother(const Node<T> *node) const {
+        if (node->parent == nullptr) {
+            return nullptr;
+        }
+
+        if (node->parent->left == node) {
+            return node->parent->right;
+        } else {
+            return node->parent->left;
+        }
+    }
+
+    Node<T> *getGrandparent(const Node<T> *node) const {
+        if (node == nullptr) {
+            if (node->parent == nullptr) {
+                return nullptr;
+            }
+        }
+
+        return node->parent->parent;
+    }
+
+    Node<T> *getUncle(const Node<T> *node) const {
+        Node<T> *grandparent = getGrandparent(node);
+        if (grandparent == nullptr) {
+            return nullptr;
+        }
+
+        return (node->parent == grandparent->left) ? grandparent->right : grandparent->left;
+    }
+
     void destroy(Node<T> *node) {
-        if (root == nullptr) {
+        if (node == nullptr) {
             return;
         }
 
@@ -251,9 +363,27 @@ using std::cout;
 #include "Utils.h"
 
 int main() {
-    RBTree<int> *rb_tree = new RBTree<int>();
+    RBTree<int> *rb_tree = new RBTree<int>(/*{2, 0, 3, 1, 4}*/);
 
+    srand(time(nullptr));
 
+    for (int i = 0; i < 10; ++i) {
+        int number = Utils::getRandomNumber(0, 1000);
+        if (rb_tree->find(number) != nullptr) {
+            --i;
+            continue;
+        }
+        rb_tree->insert(number);
+    }
+
+    rb_tree->print(rb_tree->root);
+
+    CheckRBTree<int> *checkRbTree = new CheckRBTree<int>();
+    if (checkRbTree->isRBTree(rb_tree->root)) {
+        std::cout << "YES";
+    } else {
+        std::cout << "NO";
+    }
 
     delete rb_tree;
 
