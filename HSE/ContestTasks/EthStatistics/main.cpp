@@ -1,49 +1,20 @@
 #include <iostream>
 #include <string>
-#include <list>
+#include <vector>
 
 using std::cin;
 using std::cout;
 
-std::list<int>::iterator findPosition(std::list<int>::iterator begin, std::list<int>::iterator end,
-                                      int32_t credits) {
-    if (*begin >= *end) {
-        return begin;
-    }
-
-    //std::advance(end, -1);
-
-    std::list<int>::iterator middle = begin;
-    uint64_t distance = std::distance(begin, end) / 2;
-    std::advance(middle, distance);
-
-    std::list<int>::iterator result;
-
-    if (credits == *middle) {
-        return middle;
-    }
-
-    if (credits > *middle) {
-        //std::advance(middle, 1);
-        result = findPosition(middle, end, credits);
-    } else if (credits < *middle) {
-        //std::advance(middle, -1);
-        result = findPosition(begin, middle, credits);
-    }
-
-    return result;
-}
-
-#include <fstream>                        // delete
-std::ifstream f_in("../inputs/input_1");  // delete
+// #include <fstream>                        // delete
+// std::ifstream f_in("../inputs/input_1");  // delete
 
 int main() {
     std::ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    cin.rdbuf(f_in.rdbuf());  // delete
+    // cin.rdbuf(f_in.rdbuf());  // delete
 
-    std::list<int> data;
+    std::vector<int> data;
 
     int operations;
     cin >> operations;
@@ -54,19 +25,33 @@ int main() {
 
     while (--operations) {
         cin >> command;
-
         if (command == "+") {
             cin >> credits;
-            std::list<int>::iterator position = findPosition(data.begin(), data.end(), credits);
-            data.insert(position, credits);
+            if (!data.empty()) {
+                if (credits < *data.begin()) {
+                    data.emplace(data.begin(), credits);
+                }
+                for (auto it = data.end() - 1; it != data.begin() - 1; --it) {
+                    if (credits > *it) {
+                        data.emplace(it + 1, credits);
+                        break;
+                    }
+                }
+            } else {
+                data.emplace_back(credits);
+            }
         } else if (command == "-") {
             cin >> credits;
-            data.remove(credits);
+
+            for (auto it = data.begin(); it != data.end(); ++it) {
+                if (*it == credits) {
+                    data.erase(it);
+                    break;
+                }
+            }
         } else if (command == "?") {
             cin >> credits;
-            std::list<int>::iterator begin = data.begin();
-            std::advance(begin, credits - 1);
-            cout << *begin << "\n";
+            cout << data[credits - 1] << "\n";
         }
 
         if (operations % 10 == 0) {
