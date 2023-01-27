@@ -15,10 +15,12 @@ std::string longestPalindrome(const std::string &input, const int size) {
     char letter = 'A';
 
     while (letter <= 'Z') {
-        if (count[letter] % 2 != 0) {
-            mid = letter;
-            count[letter] -= 1;
-            continue;
+        if (mid.empty()) {
+            if (count[letter] % 2 != 0) {
+                mid = letter;
+                count[letter] -= 1;
+                continue;
+            }
         }
 
         for (int i = 0; i < count[letter] / 2; ++i) {
@@ -35,19 +37,23 @@ std::string longestPalindrome(const std::string &input, const int size) {
     return beg + mid + end;
 }
 
-#include <fstream>
-std::ifstream f_in("../input.txt");
+// #include <fstream>
+// std::ifstream f_in("../input.txt");
 
 int main() {
     std::ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 
-    cin.rdbuf(f_in.rdbuf());
-    
+    // cin.rdbuf(f_in.rdbuf());
+
     int size;
     std::string input;
     cin >> size >> input;
 
+    //    std::string result = longestPalindrome(input, size);
+    //    std::string expected;
+    //    cin >> expected;
+    //    cout << longestPalindrome(input, size) << "\t" << std::boolalpha << (result == expected);
     cout << longestPalindrome(input, size);
 
     return 0;

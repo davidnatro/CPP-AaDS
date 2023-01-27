@@ -22,21 +22,26 @@ void input(int data[], const int size, int &min, int &max) {
     }
 }
 
-void countSort(int data[], const int size, const int rad) {
-    int count[10]{0};
+void sort(int data[], const int size, const int min, const int max) {
+    int count_size = max - min + 1;
+    int count[count_size];
     int result[size];
 
-    for (int i = 0; i < size; ++i) {
-        count[(data[i] / rad) % 256] += 1;
+    for (int i = 0; i < count_size; ++i) {
+        count[i] = 0;
     }
 
-    for (int i = 1; i < 10; ++i) {
+    for (int i = 0; i < size; ++i) {
+        count[data[i] - min] += 1;
+    }
+
+    for (int i = 1; i < count_size; ++i) {
         count[i] += count[i - 1];
     }
 
     for (int i = size - 1; i >= 0; --i) {
-        result[count[(data[i] / rad) % 256] - 1] = data[i];
-        count[(data[i] / rad) % 256] -= 1;
+        result[count[data[i] - min] - 1] = data[i];
+        count[data[i] - min] -= 1;
     }
 
     for (int i = 0; i < size; ++i) {
