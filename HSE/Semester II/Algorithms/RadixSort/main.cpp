@@ -49,11 +49,11 @@ void sort(int data[], const int size, const int min, const int max) {
     }
 }
 
-void radixSort(int data[], const int size, const int max) {
-    for (int i = 1; max / i > 0; i *= 10) {
-        countSort(data, size, i);
-    }
-}
+//void radixSort(int data[], const int size, const int max) {
+//    for (int i = 1; max / i > 0; i *= 10) {
+//        countSort(data, size, i);
+//    }
+//}
 
 void print(int data[], const int size) {
     for (int i = 0; i < size; ++i) {
@@ -61,20 +61,51 @@ void print(int data[], const int size) {
     }
 }
 
+//int main() {
+//    std::ios_base::sync_with_stdio(false);
+//    cin.tie(nullptr);
+//
+//    int size;
+//    cin >> size;
+//
+//    int data[size];
+//    int min, max;
+//    input(data, size, min, max);
+//
+//    radixSort(data, size, max);
+//
+//    print(data, size);
+//
+//    return 0;
+//}
+
+
+#include <iostream>
+#include <vector>
+
+void radixSort(std::vector<int>& arr) {
+    const int base = 256;
+    std::vector<int> temp(arr.size());
+    for (int i = 0; i < 4; i++) {
+        std::vector<int> count(base);
+        for (int j = 0; j < arr.size(); j++) {
+            count[(arr[j] >> (i * 8)) & (base - 1)]++;
+        }
+        for (int j = 1; j < base; j++) {
+            count[j] += count[j - 1];
+        }
+        for (int j = arr.size() - 1; j >= 0; j--) {
+            temp[--count[(arr[j] >> (i * 8)) & (base - 1)]] = arr[j];
+        }
+        arr = temp;
+    }
+}
+
 int main() {
-    std::ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    int size;
-    cin >> size;
-
-    int data[size];
-    int min, max;
-    input(data, size, min, max);
-
-    radixSort(data, size, max);
-
-    print(data, size);
-
+    std::vector<int> arr = {170, 45, 75, 90, 802, 24, 2, 66};
+    radixSort(arr);
+    for (int i : arr) {
+        std::cout << i << " ";
+    }
     return 0;
 }
