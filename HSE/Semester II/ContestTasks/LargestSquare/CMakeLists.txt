@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
-project(RadixSort)
+project(LargestSquare)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(RadixSort main.cpp)
+add_executable(LargestSquare main.cpp)

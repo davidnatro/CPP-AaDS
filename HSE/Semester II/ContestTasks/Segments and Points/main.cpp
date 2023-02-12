@@ -4,25 +4,6 @@
 using std::cin;
 using std::cout;
 
-void input(std::pair<int, int> segments[], const int segments_size, int points[],
-           const int points_size) {
-    int segment1, segment2;
-    for (int i = 0; i < segments_size; ++i) {
-        cin >> segment1 >> segment2;
-        segments[i] = std::make_pair(segment1, segment2);
-    }
-
-    //    for (int i = 0; i < points_size; ++i) {
-    //        cin >> points[i];
-    //    }
-}
-
-void print(const int data[], const int size) {
-    for (int i = 0; i < size; ++i) {
-        cout << data << " ";
-    }
-}
-
 int main() {
     std::ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -30,26 +11,45 @@ int main() {
     int segments_size, points_size;
     cin >> segments_size >> points_size;
 
-    std::pair<int, int> segments[segments_size];
-    int points[0];
+    int left_bounds[segments_size];
+    int right_bounds[segments_size];
 
-    input(segments, segments_size, points, points_size);
+    for (int i = 0; i < segments_size; ++i) {
+        cin >> left_bounds[i] >> right_bounds[i];
+    }
 
-    std::sort(segments, segments + segments_size,
-              [](std::pair<int, int> f, std::pair<int, int> s) { return f.first < s.first; });
+    std::sort(left_bounds, left_bounds + segments_size);
+    std::sort(right_bounds, right_bounds + segments_size);
 
-    int point, count;
+    int input, count, left, right, mid;
     for (int i = 0; i < points_size; ++i) {
-        cin >> point;
-        count = 0;
-        for (int j = 0; j < segments_size; ++j) {
-            if (point < segments[j].first) {
-                break;
-            }
-            if (point <= segments[j].second) {
-                count += 1;
+        cin >> input;
+
+        left = 0;
+        right = segments_size - 1;
+        while (left <= right) {
+            mid = left + (right - left) / 2;
+            if (left_bounds[mid] > input) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
             }
         }
+
+        count = right + 1;
+
+        left = 0;
+        right = segments_size - 1;
+        while (left <= right) {
+            mid = left + (right - left) / 2;
+            if (right_bounds[mid] < input) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        count -= right + 1;
         cout << count << " ";
     }
 
