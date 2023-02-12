@@ -4,22 +4,13 @@
 using std::cin;
 using std::cout;
 
-void printMatrix(const std::vector<std::vector<int>> &data) {
-    for (int i = 0; i < data.size(); ++i) {
-        for (int j = 0; j < data[i].size(); ++j) {
-            cout << data[i][j] << "\t";
-        }
-        cout << "\n";
-    }
-}
-
-int sum(const std::vector<std::vector<int>> &data, int x1, int y1, int x2, int y2) {
+const int64_t sum(const std::vector<std::vector<int64_t>> &data, int x1, int y1, int x2, int y2) {
     x1 -= 1;
     x2 -= 1;
     y1 -= 1;
     y2 -= 1;
 
-    int result = data[x2][y2];
+    int64_t result = data[x2][y2];
 
     if (x1 > 0) {
         result -= data[x1 - 1][y2];
@@ -43,7 +34,7 @@ int main() {
     int rows, columns, operations;
     cin >> rows >> columns >> operations;
 
-    std::vector<std::vector<int>> data(rows, std::vector<int>(columns, 0));
+    std::vector<std::vector<int64_t>> data(rows, std::vector<int64_t>(columns));
 
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < columns; ++j) {
