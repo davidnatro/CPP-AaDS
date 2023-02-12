@@ -4,6 +4,8 @@
 using std::cin;
 using std::cout;
 
+// https://www.cyberforum.ru/cpp-beginners/thread1163749.html
+
 int main() {
     std::ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
