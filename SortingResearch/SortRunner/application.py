@@ -10,7 +10,7 @@ class App:
         self.data_almost_sorted = ArrayGenerator.generate_almost_sorted(4100)
         self.data_reverse_sorted = ArrayGenerator.generate_reverse_sorted(4100)
 
-        self.run_times = 15
+        self.run_times = 25
 
     def get_all_sorting_folders(self):
         sorts = "../SortAlgorithms/"
@@ -38,18 +38,17 @@ class App:
 
         head = ['размеры массива']
         results = []
-        times = []
 
         for folder in subfolders:
-            print("Running " + os.path.basename(folder))
             head.append(os.path.basename(folder) + " от 0 до 5")
             head.append(os.path.basename(folder) + " от 0 до 4000")
             head.append(os.path.basename(folder) + " почти отсортированный")
             head.append(os.path.basename(folder) + " отсортированный в обратном порядке")
 
-            for i in range(start, end + 1, step):
-                print("Size " + str(i))
-                times.append(i)
+        for i in range(start, end + 1, step):
+            times = [i]
+            for folder in subfolders:
+                print("Running " + os.path.basename(folder) + " size " + str(i))
 
                 datafrom0to5 = ArrayGenerator.clone_array(i, self.data_from_0to5)
                 time = 0
@@ -95,8 +94,10 @@ class App:
                 time = time / self.run_times
                 times.append(time)
 
-                results.append(times)
-                times.clear()
+            results.append(times)
 
         print(head)
-        print(results)
+        for row in results:
+            print(row)
+
+        return head, results
