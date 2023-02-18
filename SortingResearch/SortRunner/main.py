@@ -5,7 +5,7 @@ import csv
 
 if __name__ == '__main__':
     app = App()
-    app.run()
+    app.run(50, 300, 50)
 
     # with open('../Results.csv', 'w', encoding='UTF-8') as f:
     #     writer = csv.writer(f)
