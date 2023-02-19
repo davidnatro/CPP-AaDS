@@ -1,7 +1,5 @@
-from array_generator import ArrayGenerator
 from application import App
-import result_checker
-import csv
+import pandas as pd
 
 
 def main():
@@ -10,29 +8,21 @@ def main():
 
     from100to4100_results = app.run(100, 4100, 100)
 
-    with open('../TimeResults0_50.csv', 'w', encoding='UTF-8') as f:
-        writer = csv.writer(f, delimiter=';')
+    df = pd.DataFrame(from50to300_results[1], columns=from50to300_results[0])
+    with pd.ExcelWriter("../TimeResults0_50.xlsx") as writer:
+        df.to_excel(writer)
 
-        writer.writerow(from50to300_results[0])
-        writer.writerows(from50to300_results[1])
+    df = pd.DataFrame(from50to300_results[2], columns=from50to300_results[0])
+    with pd.ExcelWriter("../OperationsResults0_50.xlsx") as writer:
+        df.to_excel(writer)
 
-    with open('../OperationsResults0_50.csv', 'w', encoding='UTF-8') as f:
-        writer = csv.writer(f, delimiter=';')
+    df = pd.DataFrame(from100to4100_results[1], columns=from100to4100_results[0])
+    with pd.ExcelWriter("../TimesResults100_4100.xlsx") as writer:
+        df.to_excel(writer)
 
-        writer.writerow(from50to300_results[0])
-        writer.writerows(from50to300_results[2])
-
-    with open('../TimesResults100_4100.csv', 'w', encoding='UTF-8') as f:
-        writer = csv.writer(f, delimiter=';')
-
-        writer.writerow(from100to4100_results[0])
-        writer.writerows(from100to4100_results[1])
-
-    with open('../OperationsResults100_4100.csv', 'w', encoding='UTF-8') as f:
-        writer = csv.writer(f, delimiter=';')
-
-        writer.writerow(from100to4100_results[0])
-        writer.writerows(from100to4100_results[2])
+    df = pd.DataFrame(from100to4100_results[2], columns=from100to4100_results[0])
+    with pd.ExcelWriter("../OperationsResults100_4100.xlsx") as writer:
+        df.to_excel(writer)
 
 
 if __name__ == '__main__':
