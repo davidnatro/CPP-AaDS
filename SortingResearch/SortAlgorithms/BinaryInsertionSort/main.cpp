@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 
+int elementary_operations = 0;
+
 int binarySearch(const std::vector<int> &data, const int item, int low, int high) {
     while (low <= high) {
         int mid = low + (high - low) / 2;
@@ -17,19 +19,27 @@ int binarySearch(const std::vector<int> &data, const int item, int low, int high
 }
 
 void insertionSort(std::vector<int> &data) {
-    int i, location, j, selected;
+    int location, j, selected;
 
-    for (i = 1; i < data.size(); ++i) {
+    for (int i = 1; i < data.size(); ++i) {
+        elementary_operations += 3;  // = < ++
         j = i - 1;
+        elementary_operations += 2;  // = -
         selected = data[i];
+        elementary_operations += 2;  // = data[]
 
         location = binarySearch(data, selected, 0, j);
+        elementary_operations += 1;  // =
 
+        elementary_operations += 1;  // >=
         while (j >= location) {
+            elementary_operations += 3;  // data[] =
             data[j + 1] = data[j];
             j--;
+            elementary_operations += 1;  // --
         }
         data[j + 1] = selected;
+        elementary_operations += 2;  // data[] =
     }
 }
 
@@ -53,6 +63,8 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < data_size; ++i) {
         std::cout << data[i] << "\t";
     }
+
+    std::cout << elementary_operations;
 
     return 0;
 }

@@ -5,11 +5,16 @@
 using std::cin;
 using std::cout;
 
+int elementary_operations = 0;
+
 void bubbleSort(std::vector<int> &data) {
-    int i, j;
-    for (i = 0; i < data.size() - 1; i++) {
-        for (j = 0; j < data.size() - i - 1; j++) {
+    for (int i = 0; i < data.size() - 1; i++) {
+        elementary_operations += 4;  // = < - ++
+        for (int j = 0; j < data.size() - i - 1; j++) {
+            elementary_operations += 5;  // = < - - ++
+            elementary_operations += 3;  // data[] >
             if (data[j] > data[j + 1]) {
+                elementary_operations += 3;  // swap data[]
                 std::swap(data[j], data[j + 1]);
             }
         }
@@ -37,6 +42,7 @@ int main(int argc, char *argv[]) {
         std::cout << data[i] << "\t";
     }
 
+    std::cout << elementary_operations;
+
     return 0;
 }
-

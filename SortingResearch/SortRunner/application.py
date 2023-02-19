@@ -10,6 +10,34 @@ class App:
         self.data_almost_sorted = ArrayGenerator.generate_almost_sorted(4100)
         self.data_reverse_sorted = ArrayGenerator.generate_reverse_sorted(4100)
 
+        with open('../Arrays/from0to5.txt', 'w', encoding='UTF-8') as f:
+            f.write(str(self.data_from_0to5))
+            f.write("\n\n==========================\n\n")
+            clone = ArrayGenerator.clone_array(4100, self.data_from_0to5)
+            clone.sort()
+            f.write(str(clone))
+
+        with open('../Arrays/from0to4000.txt', 'w', encoding='UTF-8') as f:
+            f.write(str(self.data_from_0to4000))
+            f.write("\n\n==========================\n\n")
+            clone = ArrayGenerator.clone_array(4100, self.data_from_0to4000)
+            clone.sort()
+            f.write(str(clone))
+
+        with open('../Arrays/almost_sorted.txt', 'w', encoding='UTF-8') as f:
+            f.write(str(self.data_almost_sorted))
+            f.write("\n\n==========================\n\n")
+            clone = ArrayGenerator.clone_array(4100, self.data_almost_sorted)
+            clone.sort()
+            f.write(str(clone))
+
+        with open('../Arrays/reverse_sorted.txt', 'w', encoding='UTF-8') as f:
+            f.write(str(self.data_reverse_sorted))
+            f.write("\n\n==========================\n\n")
+            clone = ArrayGenerator.clone_array(4100, self.data_reverse_sorted)
+            clone.sort()
+            f.write(str(clone))
+
         self.run_times = 25
 
     def get_all_sorting_folders(self):
@@ -30,14 +58,18 @@ class App:
 
         time = int(result[0].strip())
         result_arr = [int(i) for i in result[1].strip().split("\t")]
+        operations = int(result_arr[len(result_arr) - 1])
+        result_arr.pop(len(result_arr) - 1)
 
-        return time, result_arr
+        return time, result_arr, operations
 
     def run(self, start, end, step):
         subfolders = self.get_all_sorting_folders()
 
         head = ['размеры массива']
         results = []
+        operations_results = []
+        operations = []
 
         for folder in subfolders:
             head.append(os.path.basename(folder) + " от 0 до 5")
@@ -47,6 +79,7 @@ class App:
 
         for i in range(start, end + 1, step):
             times = [i]
+            operations = [i]
             for folder in subfolders:
                 print("Running " + os.path.basename(folder) + " size " + str(i))
 
@@ -60,6 +93,7 @@ class App:
 
                 time = time / self.run_times
                 times.append(time)
+                operations.append(result[2])
 
                 datafrom0to4000 = ArrayGenerator.clone_array(i, self.data_from_0to4000)
                 time = 0
@@ -71,6 +105,7 @@ class App:
 
                 time = time / self.run_times
                 times.append(time)
+                operations.append(result[2])
 
                 dataalmostsorted = ArrayGenerator.clone_array(i, self.data_almost_sorted)
                 time = 0
@@ -82,6 +117,7 @@ class App:
 
                 time = time / self.run_times
                 times.append(time)
+                operations.append(result[2])
 
                 datareversesorted = ArrayGenerator.clone_array(i, self.data_reverse_sorted)
                 time = 0
@@ -93,11 +129,9 @@ class App:
 
                 time = time / self.run_times
                 times.append(time)
+                operations.append(result[2])
 
             results.append(times)
+            operations_results.append(operations)
 
-        print(head)
-        for row in results:
-            print(row)
-
-        return head, results
+        return head, results, operations_results
