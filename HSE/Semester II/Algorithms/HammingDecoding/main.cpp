@@ -2,43 +2,21 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <string>
+#include <bitset>
 
 using std::cin;
 using std::cout;
 
-bool isPowerOfTwo(int n) {
+bool isPowerOfTwo(const int n) {
     if (n == 0) {
         return false;
     }
 
-    return (std::ceil(std::log2(n)) == std::floor(std::log2(n)));
+    return (std::ceil(std::log2(n)) - std::floor(std::log2(n))) == 0;
 }
 
-std::string decimalToBinary(int num, int size) {
-    std::string str;
-    while (num) {
-        if (num & 1) {  // 1
-            str += '1';
-        } else {  // 0
-            str += '0';
-        }
-        num >>= 1;
-    }
-
-    while (str.size() < size) {
-        str += '0';
-    }
-
-    return str;
-}
-
-int main() {
-    std::ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    std::string hamming_code;
-    cin >> hamming_code;
-
+std::string hammingDecode(const std::string &hamming_code) {
     std::vector<std::vector<char>> bits(1, std::vector<char>(hamming_code.size() + 1));
 
     int count = 0;
@@ -57,40 +35,48 @@ int main() {
 
     std::string binary_num;
     for (size_t j = 1; j < bits[0].size(); ++j) {
-        binary_num = decimalToBinary(j, count);
+        binary_num = std::bitset<32>(j).to_string();
+
         int row = 1;
-        for (size_t i = 0; i < binary_num.size(); ++i) {
-            bits[row][j] = binary_num[i];
+        int end = 31;
+
+        for (int i = 0; i < count; ++i) {
+            bits[row][j] = binary_num[end];
+
             row += 1;
+            end -= 1;
         }
     }
 
     std::vector<char> syndromes(count);
-    int index = 0;
     for (size_t i = 1; i < bits.size(); ++i) {
         int scalar = 0;
         for (size_t j = 1; j < bits[0].size(); ++j) {
-            scalar += static_cast<int>(bits[i][j]) * static_cast<int>(bits[0][j]) % 2;
+            scalar += ((bits[i][j] == '0' ? 0 : 1) * (bits[0][j] == '0' ? 0 : 1));
         }
 
-        syndromes[index] = (scalar % 2 == 0) ? '0' : '1';
-        index += 1;
+        syndromes[i - 1] = (scalar % 2 == 0) ? '0' : '1';
     }
 
     std::string syndromes_string;
     bool is_correct = true;
-    for (const char syndrome : syndromes) {
-        if (syndrome != '0') {
+    for (int i = syndromes.size() - 1; i >= 0; --i) {
+        if (syndromes[i] != '0') {
             is_correct = false;
         }
 
-        syndromes_string.push_back(syndrome);
+        syndromes_string.push_back(syndromes[i]);
     }
 
     if (!is_correct) {
-        std::reverse(syndromes_string.begin(), syndromes_string.end());
         int error_position = std::stoi(syndromes_string, nullptr, 2);
-        bits[0][error_position] = (bits[0][error_position] == '0') ? '1' : '0';
+        if (error_position == 0) {
+            error_position = 1;
+        }
+
+        if (error_position > 0 && error_position < bits[0].size()) {
+            bits[0][error_position] = (bits[0][error_position] == '0') ? '1' : '0';
+        }
     }
 
     std::string result;
@@ -100,7 +86,17 @@ int main() {
         }
     }
 
-    cout << result << "\n";
+    return result;
+}
+
+int main() {
+    std::ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    std::string hamming_code;
+    cin >> hamming_code;
+
+    cout << hammingDecode(hamming_code);
 
     return 0;
 }
