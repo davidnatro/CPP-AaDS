@@ -1,18 +1,5 @@
 #include <iostream>
-
-struct ListNode {
-    int val;
-    ListNode *next;
-
-    ListNode() : val(0), next(nullptr) {
-    }
-
-    ListNode(int x) : val(x), next(nullptr) {
-    }
-
-    ListNode(int x, ListNode *next) : val(x), next(next) {
-    }
-};
+#include "ListNode.h"
 
 class Solution {
 public:
@@ -22,8 +9,8 @@ public:
         ListNode *next = nullptr;
 
         while (current != nullptr) {
-            next = current->next;
-            current->next = previous;
+            next = current->getNext();
+            current->setNext(previous);
 
             previous = current;
             current = next;
@@ -34,6 +21,19 @@ public:
 };
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    ListNode *list = new ListNode(1);
+    Solution *solution = new Solution;
+
+    for (int i = 2; i <= 10; ++i) {
+        list->insert(i);
+        std::cout << list << "\n";
+        list = solution->reverseList(list);
+        std::cout << list << "\n";
+        list = solution->reverseList(list);
+    }
+
+    delete list;
+    delete solution;
+
     return 0;
 }
