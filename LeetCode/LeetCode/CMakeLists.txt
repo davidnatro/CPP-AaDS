@@ -11,4 +11,4 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         CACHE STRING "Compiler flags in ubsan build"
         FORCE)
 
-add_executable(LeetCode main.cpp problems/headers/MergeTwoSortedLists.h problems/sources/MergeTwoSortedLists.cpp problems/headers/ReverseLinkedList.h problems/sources/ReverseLinkedList.cpp)
+add_executable(LeetCode main.cpp

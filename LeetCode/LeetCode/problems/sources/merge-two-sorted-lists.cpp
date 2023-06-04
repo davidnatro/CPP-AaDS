@@ -1,4 +1,4 @@
-#include "../headers/MergeTwoSortedLists.h"
+#include "../headers/merge-two-sorted-lists.h"
 
 ListNode::ListNode() : val(0), next(nullptr) {
 }

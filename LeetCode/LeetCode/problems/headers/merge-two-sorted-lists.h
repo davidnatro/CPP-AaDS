@@ -1,9 +1,7 @@
 #ifndef LEETCODE_MERGETWOSORTEDLISTS_H
 #define LEETCODE_MERGETWOSORTEDLISTS_H
 
-/*
- * https://leetcode.com/problems/merge-two-sorted-lists/
- */
+//https://leetcode.com/problems/merge-two-sorted-lists/
 
 struct ListNode {
     int val;

@@ -1,4 +1,4 @@
-#include "../headers/ReverseLinkedList.h"
+#include "../headers/reverse-linked-list.h"
 
 ListNode::ListNode() : val(0), next(nullptr) {
 }
