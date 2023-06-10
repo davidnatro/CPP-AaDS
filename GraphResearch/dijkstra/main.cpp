@@ -1,54 +1,68 @@
 #include <iostream>
+#include <vector>
+#include <limits>
 #include <chrono>
-#include <queue>
 
-const uint64_t kInf = UINT64_MAX;
+const int kInf = std::numeric_limits<int>::max();
 
-struct Edge {
-    uint64_t to;
-    uint64_t weight;
-};
+// Функция для реализации алгоритма Дейкстры
+void dijkstra(const std::vector<std::vector<int>>& graph, int startNode,
+              std::vector<int>& distances) {
+    int numNodes = graph.size();
 
-struct Compare {
-    bool operator()(const std::pair<int, int>& lhs, const std::pair<int, int>& rhs) const {
-        return lhs.second > rhs.second;
-    }
-};
+    // Инициализация расстояний до всех узлов как бесконечность, кроме стартового узла
+    distances.assign(numNodes, kInf);
+    distances[startNode] = 0;
 
-void dijkstra(const std::vector<std::vector<Edge>>& graph, std::vector<uint64_t>& distances) {
-    uint64_t n = graph.size();
-    distances.assign(n, kInf);
-    distances[0] = 0;
+    // Массив для отслеживания посещенных узлов
+    std::vector<bool> visited(numNodes, false);
 
-    std::priority_queue<std::pair<uint64_t, uint64_t>, std::vector<std::pair<uint64_t, uint64_t>>,
-                        Compare>
-        pq;
+    for (int i = 0; i < numNodes - 1; ++i) {
+        int minDistance = kInf;
+        int minNode = -1;
 
-    pq.push({0, 0});
-
-    while (!pq.empty()) {
-        uint64_t curr_dist = pq.top().first;
-        uint64_t curr_vertex = pq.top().second;
-        pq.pop();
-
-        if (curr_dist > distances[curr_vertex]) {
-            continue;
+        // Находим узел с наименьшим расстоянием
+        for (int j = 0; j < numNodes; ++j) {
+            if (!visited[j] && distances[j] < minDistance) {
+                minDistance = distances[j];
+                minNode = j;
+            }
         }
 
-        for (const Edge& edge : graph[curr_vertex]) {
-            uint64_t new_dist = curr_dist + edge.weight;
-            if (new_dist < distances[edge.to]) {
-                distances[edge.to] = new_dist;
-                pq.push({new_dist, edge.to});
+        // Помечаем узел как посещенный
+        visited[minNode] = true;
+
+        // Обновляем расстояния до всех соседних узлов
+        for (int j = 0; j < numNodes; ++j) {
+            if (!visited[j] && graph[minNode][j] != 0 && distances[minNode] != kInf) {
+                int newDistance = distances[minNode] + graph[minNode][j];
+                if (newDistance < distances[j]) {
+                    distances[j] = newDistance;
+                }
             }
         }
     }
 }
 
-int main() {
+int main(int argc, char** argv) {
+    int rows = std::stoi(argv[1]);
+    int columns = std::stoi(argv[2]);
+
+    std::vector<std::vector<int>> matrix(rows, std::vector<int>(columns, 0));
+
+    int index = 3;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            matrix[i][j] = std::stoi(argv[index]);
+            index += 1;
+        }
+    }
+
+    std::vector<int> distances(rows);
+
     auto start = std::chrono::high_resolution_clock::now();
 
-    // algo
+    dijkstra(matrix, 0, distances);
 
     auto elapsed = std::chrono::high_resolution_clock::now() - start;
 
