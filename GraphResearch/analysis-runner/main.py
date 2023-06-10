@@ -2,7 +2,7 @@ from result_builder import ResultBuilder
 
 
 def main():
-    resultBuilder = ResultBuilder
+    pass
 
 
 if __name__ == '__main__':
