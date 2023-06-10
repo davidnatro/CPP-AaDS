@@ -1,8 +1,8 @@
-from matrix import Matrix
+from result_builder import ResultBuilder
 
 
 def main():
-    pass
+    resultBuilder = ResultBuilder
 
 
 if __name__ == '__main__':

@@ -42,6 +42,8 @@ class Matrix:
             (num_vertices * (num_vertices - 1)) / 10)  # Примерно 10% от максимального количества ребер
         num_extra_edges = cryptogen.randint(1, max_extra_edges)  # Случайное количество дополнительных ребер
 
+        vertices = list(range(num_vertices))
+
         for _ in range(num_extra_edges):
             u = cryptogen.randint(0, num_vertices - 1)
             v = cryptogen.randint(0, num_vertices - 1)
@@ -65,6 +67,18 @@ class Matrix:
                 graph[j][i] = weight
 
         return graph
+
+    @staticmethod
+    def count_edges(adjacency_matrix):
+        num_vertices = len(adjacency_matrix)
+        edge_count = 0
+
+        for i in range(num_vertices):
+            for j in range(i + 1, num_vertices):
+                if adjacency_matrix[i][j] != 0:
+                    edge_count += 1
+
+        return edge_count
 
     @staticmethod
     def print(matrix):
