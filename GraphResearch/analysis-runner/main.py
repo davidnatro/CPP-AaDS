@@ -1,8 +1,8 @@
-from result_builder import ResultBuilder
+from algo_runner import AlgoRunner
 
 
 def main():
-    pass
+    AlgoRunner.bellman_ford()
 
 
 if __name__ == '__main__':
