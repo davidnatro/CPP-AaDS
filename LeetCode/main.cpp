@@ -5,7 +5,7 @@
 int main() {
     Solution solution;
 
-    std::string input;
+    std::string input = "babad";
 
     std::cout << solution.longestPalindrome(input);
 
