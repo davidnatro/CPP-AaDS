@@ -1,12 +1,14 @@
 #ifndef LEETCODE_TEST_RUNNER_TEST_RUNNER_H_
 #define LEETCODE_TEST_RUNNER_TEST_RUNNER_H_
 
-#include <vector>
 #include <chrono>
 #include <iostream>
+#include <vector>
+
+#include "i-test-runner.h"
 
 template <typename T>
-class TestRunner {
+class TestRunner : public ITestRunner<T> {
 private:
     size_t test_cases_size_;
 
@@ -14,10 +16,22 @@ private:
     std::vector<T> test_results_;
 
 public:
+    size_t getTestsSize() const {
+        return test_cases_size_;
+    }
 
-    TestRunner(const std::vector<T> &test_cases, const std::vector<T> &test_results);
+    const std::vector<T> &getTestCases() const {
+        return test_cases_;
+    }
 
-    void run(T (*func)(const T &var1));
+    const std::vector<T> &getTestResults() const {
+        return test_results_;
+    }
+
+    virtual void run() override {
+    }
+
+    virtual ~TestRunner() override{};
 };
 
 #endif

@@ -11,4 +11,4 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         CACHE STRING "Compiler flags in ubsan build"
         FORCE)
 
-add_executable(LeetCode main.cpp problems/medium/headers/longest-palindromic-substring.h problems/medium/sources/longest-palindromic-substring.cpp)
+add_executable(LeetCode main.cpp problems/medium/headers/longest-palindromic-substring.h problems/medium/sources/longest-palindromic-substring.cpp test/runner/i-test-runner.h test/runner/test-runner.h)

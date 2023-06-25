@@ -4,10 +4,15 @@
 // https://leetcode.com/problems/longest-palindromic-substring/
 
 #include <string>
+#include <iostream>
 
 class Solution {
 public:
-    std::string longestPalindrome(const std::string &s);
+    std::string dynamicProgramming(const std::string &s) const;
+
+    std::string expandFromCenter(const std::string &s) const;
+
+    std::string manachersAlgorithm(const std::string &s) const;
 };
 
 #endif

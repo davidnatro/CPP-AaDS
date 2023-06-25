@@ -2,12 +2,13 @@
 
 #include "problems/medium/headers/longest-palindromic-substring.h"
 
+#include "test/runner/test-runner.h"
+
 int main() {
-    Solution solution;
 
-    std::string input = "babad";
+    ITestRunner<int> *test_runner = new TestRunner<int>();
 
-    std::cout << solution.longestPalindrome(input);
+    delete test_runner;
 
     return 0;
 }
