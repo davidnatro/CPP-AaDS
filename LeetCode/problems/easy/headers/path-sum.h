@@ -15,7 +15,7 @@ struct TreeNode {
 
 class PathSum {
 public:
-    bool hasPathSum(TreeNode *root, int targetSum);
+    bool hasPathSum(TreeNode *root, int target_sum);
 };
 
 #endif

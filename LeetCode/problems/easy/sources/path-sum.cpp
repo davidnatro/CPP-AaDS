@@ -14,27 +14,27 @@ TreeNode::~TreeNode() {
     delete right;
 }
 
-bool PathSum::hasPathSum(TreeNode *root, int targetSum) {
+bool PathSum::hasPathSum(TreeNode *root, int target_sum) {
     if (root == nullptr) {
         return false;
     }
 
-    targetSum -= root->val;
+    target_sum -= root->val;
     bool left = false;
     bool right = false;
 
-    if (targetSum == 0) {
+    if (target_sum == 0) {
         if (root->left == nullptr && root->right == nullptr) {
             return true;
         }
     }
 
     if (root->left != nullptr) {
-        left = hasPathSum(root->left, targetSum);
+        left = hasPathSum(root->left, target_sum);
     }
 
     if (root->right != nullptr) {
-        right = hasPathSum(root->right, targetSum);
+        right = hasPathSum(root->right, target_sum);
     }
 
     return left || right;

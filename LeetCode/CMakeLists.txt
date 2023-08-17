@@ -11,6 +11,4 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         CACHE STRING "Compiler flags in ubsan build"
         FORCE)
 
-add_executable(LeetCode main.cpp
-        problems/easy/headers/intersection-of-two-arrays-ii.h
-        problems/easy/sources/intersection-of-two-arrays-ii.cpp)
+add_executable(LeetCode main.cpp)
