@@ -12,5 +12,5 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         FORCE)
 
 add_executable(LeetCode main.cpp
-        problems/easy/headers/intersection-of-two-arrays.h
-        problems/easy/sources/intersection-of-two-arrays.cpp)
+        problems/easy/headers/intersection-of-two-arrays-ii.h
+        problems/easy/sources/intersection-of-two-arrays-ii.cpp)
