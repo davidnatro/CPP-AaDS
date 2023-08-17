@@ -1,6 +1,8 @@
 #ifndef LEETCODE_PROBLEMS_EASY_HEADERS_REMOVE_DUPLICATES_FROM_SORTED_LIST_H_
 #define LEETCODE_PROBLEMS_EASY_HEADERS_REMOVE_DUPLICATES_FROM_SORTED_LIST_H_
 
+// https://leetcode.com/problems/remove-duplicates-from-sorted-list/
+
 struct ListNode {
     int val;
     ListNode* next;
@@ -15,4 +17,4 @@ public:
     ListNode* deleteDuplicates(ListNode* head);
 };
 
-#endif  // LEETCODE_PROBLEMS_EASY_HEADERS_REMOVE_DUPLICATES_FROM_SORTED_LIST_H_
+#endif
