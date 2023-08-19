@@ -5,7 +5,7 @@
 
 #include <vector>
 
-class Solution {
+class PlusOne {
 public:
     std::vector<int> plusOne(std::vector<int>& digits);
 };

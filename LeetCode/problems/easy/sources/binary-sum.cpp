@@ -1,6 +1,6 @@
 #include "../headers/binary-sum.h"
 
-std::string Solution::addBinary(const std::string &a, const std::string &b) {
+std::string BinarySum::addBinary(const std::string &a, const std::string &b) {
     std::string result;
     int carry = 0;
     int i = a.size() - 1;

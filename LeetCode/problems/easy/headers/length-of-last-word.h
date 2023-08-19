@@ -5,7 +5,7 @@
 
 #include <string>
 
-class Solution {
+class LengthOfLastWord {
 public:
     int lengthOfLastWord(const std::string &s);
 };

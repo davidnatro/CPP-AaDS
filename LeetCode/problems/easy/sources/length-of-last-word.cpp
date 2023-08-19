@@ -1,6 +1,6 @@
 #include "../headers/length-of-last-word.h"
 
-int Solution::lengthOfLastWord(const std::string &s) {
+int LengthOfLastWord::lengthOfLastWord(const std::string &s) {
     int last_index = s.size() - 1;
     while (s[last_index] == ' ') {
         last_index -= 1;

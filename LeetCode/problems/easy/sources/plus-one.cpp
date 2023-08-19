@@ -1,6 +1,6 @@
 #include "../headers/plus-one.h"
 
-std::vector<int> Solution::plusOne(std::vector<int> &digits) {
+std::vector<int> PlusOne::plusOne(std::vector<int> &digits) {
     int index = digits.size() - 1;
     while (index >= 0) {
         if (digits[index] == 9) {

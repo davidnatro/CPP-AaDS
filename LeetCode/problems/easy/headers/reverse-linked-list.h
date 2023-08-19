@@ -10,11 +10,10 @@ struct ListNode {
     ListNode();
     explicit ListNode(int x);
     ListNode(int x, ListNode *next);
-
     ~ListNode();
 };
 
-class Solution {
+class ReverseLinkedList {
 public:
     ListNode *reverseList(ListNode *head);
 };

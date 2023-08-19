@@ -3,7 +3,7 @@
 
 // https://leetcode.com/problems/sqrtx/
 
-class Solution {
+class MySqrt {
 public:
     int mySqrt(int x);
 };

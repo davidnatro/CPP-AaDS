@@ -5,7 +5,7 @@
 
 #include <string>
 
-class Solution {
+class BinarySum {
 public:
     std::string addBinary(const std::string &a, const std::string &b);
 };

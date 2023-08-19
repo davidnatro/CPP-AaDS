@@ -13,7 +13,7 @@ ListNode::~ListNode() {
     delete next;
 }
 
-ListNode *Solution::mergeTwoLists(ListNode *list1, ListNode *list2) {
+ListNode *MergeTwoSortedLists::mergeTwoLists(ListNode *list1, ListNode *list2) {
     ListNode *new_list_begin = new ListNode();
     ListNode *new_list = new_list_begin;
 

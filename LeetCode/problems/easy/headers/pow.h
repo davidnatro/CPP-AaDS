@@ -7,7 +7,7 @@
 #include <string>
 #include <bitset>
 
-class Solution {
+class MyPow {
 public:
     double myPow(double x, int n);
 };

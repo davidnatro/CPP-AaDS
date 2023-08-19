@@ -1,6 +1,6 @@
 #include "../headers/pow.h"
 
-double Solution::myPow(double x, int n) {
+double MyPow::myPow(double x, int n) {
     if (n == 0) {
         return 1;
     }

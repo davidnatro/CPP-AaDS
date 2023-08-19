@@ -13,7 +13,7 @@ ListNode::~ListNode() {
     delete next;
 }
 
-ListNode *Solution::reverseList(ListNode *head) {
+ListNode *ReverseLinkedList::reverseList(ListNode *head) {
 
     ListNode *current = head;
     ListNode *previous = nullptr;

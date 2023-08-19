@@ -10,11 +10,10 @@ struct ListNode {
     ListNode();
     explicit ListNode(int x);
     ListNode(int x, ListNode *next);
-
     ~ListNode();
 };
 
-class Solution {
+class MergeTwoSortedLists {
 public:
     ListNode *mergeTwoLists(ListNode *list1, ListNode *list2);
 };
