@@ -11,6 +11,4 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         CACHE STRING "Compiler flags in ubsan build"
         FORCE)
 
-add_executable(LeetCode main.cpp
-        problems/easy/headers/merge-two-binary-trees.h
-        problems/easy/sources/merge-two-binary-trees.cpp)
+add_executable(LeetCode main.cpp)
