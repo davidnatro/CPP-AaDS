@@ -11,4 +11,6 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         CACHE STRING "Compiler flags in ubsan build"
         FORCE)
 
-add_executable(LeetCode main.cpp)
+add_executable(LeetCode main.cpp
+        problems/medium/headers/clone-graph.h
+        problems/medium/sources/clone-graph.cpp)
