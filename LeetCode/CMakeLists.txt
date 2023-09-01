@@ -12,5 +12,5 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         FORCE)
 
 add_executable(LeetCode main.cpp
-        problems/medium/headers/clone-graph.h
-        problems/medium/sources/clone-graph.cpp)
+        problems/medium/headers/remove-duplicates-from-sorted-list-ii.h
+        problems/medium/sources/remove-duplicated-from-sorted-list-ii.cpp)
