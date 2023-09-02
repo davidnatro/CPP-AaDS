@@ -3,7 +3,7 @@
 
 // https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
 
-#include <map>
+#include <unordered_map>
 
 struct ListNode {
     int val;
@@ -12,11 +12,13 @@ struct ListNode {
     ListNode();
     ListNode(int x);
     ListNode(int x, ListNode* next);
+
+    ~ListNode();
 };
 
 class RemoveDuplicatesFromSortedListII {
 public:
-    ListNode* deleteDuplicatesUsingMap(ListNode* head);
+    ListNode* deleteDuplicates(ListNode* head);
 };
 
 #endif

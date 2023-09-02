@@ -11,6 +11,4 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         CACHE STRING "Compiler flags in ubsan build"
         FORCE)
 
-add_executable(LeetCode main.cpp
-        problems/medium/headers/remove-duplicates-from-sorted-list-ii.h
-        problems/medium/sources/remove-duplicated-from-sorted-list-ii.cpp)
+add_executable(LeetCode main.cpp)
