@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.24"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "ShellSortCiuraSequence",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ShellSortCiuraSequence::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ShellSortCiuraSequence-Debug-a63377758af6facdd538.json",
+					"name" : "ShellSortCiuraSequence",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/SortingResearch/SortAlgorithms/ShellSortCiuraSequence/cmake-build-debug",
+		"source" : "/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/SortingResearch/SortAlgorithms/ShellSortCiuraSequence"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

@@ -1,0 +1,3 @@
+/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/ContestTasks/TediousLee/cmake-build-debug/CMakeFiles/TediousLee.dir
+/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/ContestTasks/TediousLee/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/ContestTasks/TediousLee/cmake-build-debug/CMakeFiles/rebuild_cache.dir

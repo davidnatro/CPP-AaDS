@@ -1,0 +1,4 @@
+# ninja log v5
+1	57	1680181403387538357	build.ninja	de51d685a65d0288
+447	494	1677845355431234681	ScheduleForWeightedIntervals	b78220f7ec17280d
+4	447	1677845355382003373	CMakeFiles/ScheduleForWeightedIntervals.dir/main.cpp.o	7607af236be2cb80

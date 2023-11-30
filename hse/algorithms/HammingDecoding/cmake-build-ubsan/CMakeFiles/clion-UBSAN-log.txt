@@ -1,0 +1,4 @@
+"/Users/davidnatroshvili/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/223.8836.42/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=RelWithDebInfo "-DCMAKE_MAKE_PROGRAM=/Users/davidnatroshvili/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/223.8836.42/CLion.app/Contents/bin/ninja/mac/ninja" -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_BUILD_TYPE=UBSAN -G Ninja -S "/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/Algorithms/HammingDecoding" -B "/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/Algorithms/HammingDecoding/cmake-build-ubsan"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/Algorithms/HammingDecoding/cmake-build-ubsan

@@ -1,0 +1,3 @@
+/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/ContestTasks/Segments and Points/cmake-build-debug/CMakeFiles/Segments_and_Points.dir
+/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/ContestTasks/Segments and Points/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/ContestTasks/Segments and Points/cmake-build-debug/CMakeFiles/rebuild_cache.dir

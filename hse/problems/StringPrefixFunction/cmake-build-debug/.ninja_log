@@ -1,0 +1,15 @@
+# ninja log v5
+0	548	1679748755358530499	CMakeFiles/StringPrefixFunction.dir/main.cpp.o	b091dff9ed783de0
+550	602	1679748755414767233	StringPrefixFunction	cb97f1eb0718a932
+4	519	1679749227854965754	CMakeFiles/StringPrefixFunction.dir/main.cpp.o	b091dff9ed783de0
+519	578	1679749227916499367	StringPrefixFunction	cb97f1eb0718a932
+3	505	1679749511858089836	CMakeFiles/StringPrefixFunction.dir/main.cpp.o	b091dff9ed783de0
+505	558	1679749511912943928	StringPrefixFunction	cb97f1eb0718a932
+3	377	1679749596629631302	CMakeFiles/StringPrefixFunction.dir/main.cpp.o	b091dff9ed783de0
+377	422	1679749596676032200	StringPrefixFunction	cb97f1eb0718a932
+3	355	1679749606350350441	CMakeFiles/StringPrefixFunction.dir/main.cpp.o	b091dff9ed783de0
+355	396	1679749606392496492	StringPrefixFunction	cb97f1eb0718a932
+4	552	1679749718495373944	CMakeFiles/StringPrefixFunction.dir/main.cpp.o	b091dff9ed783de0
+552	595	1679749718541195384	StringPrefixFunction	cb97f1eb0718a932
+3	513	1679749906047362911	CMakeFiles/StringPrefixFunction.dir/main.cpp.o	b091dff9ed783de0
+513	569	1679749906105456513	StringPrefixFunction	cb97f1eb0718a932

@@ -1,0 +1,3 @@
+/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/SortingResearch/SortAlgorithms/BubbleSortOptimizedI/cmake-build-debug/CMakeFiles/BubbleSortOptimizedI.dir
+/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/SortingResearch/SortAlgorithms/BubbleSortOptimizedI/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/SortingResearch/SortAlgorithms/BubbleSortOptimizedI/cmake-build-debug/CMakeFiles/rebuild_cache.dir

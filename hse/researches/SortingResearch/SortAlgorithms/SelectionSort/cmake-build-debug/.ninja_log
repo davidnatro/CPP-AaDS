@@ -1,0 +1,7 @@
+# ninja log v5
+1	413	1676652194528563883	CMakeFiles/SelectionSort.dir/main.cpp.o	800c935651f32659
+413	462	1676652194578662266	SelectionSort	d8be06e6e8e5e9eb
+1	307	1676755035428193701	CMakeFiles/SelectionSort.dir/main.cpp.o	df4bd7a907b77ab5
+307	345	1676755035467917973	SelectionSort	d8be06e6e8e5e9eb
+0	439	1676803363021580272	CMakeFiles/SelectionSort.dir/main.cpp.o	df4bd7a907b77ab5
+439	489	1676803363073664451	SelectionSort	d8be06e6e8e5e9eb
