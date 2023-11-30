@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(LeetCode)
+project(leetcode)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -11,4 +11,4 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         CACHE STRING "Compiler flags in ubsan build"
         FORCE)
 
-add_executable(LeetCode main.cpp)
+add_executable(leetcode main.cpp)
