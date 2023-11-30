@@ -1,0 +1,9 @@
+# ninja log v5
+0	557	1679520965003107390	CMakeFiles/HuffmanDecoding.dir/main.cpp.o	a5e50cbe8ebb33c7
+558	612	1679520965061102248	HuffmanDecoding	50e88fa06232e477
+3	584	1679559714683424636	CMakeFiles/HuffmanDecoding.dir/main.cpp.o	a5e50cbe8ebb33c7
+585	647	1679559714751977376	HuffmanDecoding	50e88fa06232e477
+4	421	1679559737621887242	CMakeFiles/HuffmanDecoding.dir/main.cpp.o	a5e50cbe8ebb33c7
+421	465	1679559737666871695	HuffmanDecoding	50e88fa06232e477
+4	584	1679559818054004792	CMakeFiles/HuffmanDecoding.dir/main.cpp.o	a5e50cbe8ebb33c7
+584	641	1679559818113005800	HuffmanDecoding	50e88fa06232e477

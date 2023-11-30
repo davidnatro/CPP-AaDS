@@ -1,4 +1,4 @@
-# Algorithms and Data Structures
+# Algorithms and Data Structures in C++
 
 ## [Algorithms and Data Stuctures at Higher School of Economics, Computer science, Software Engineering](HSE/)
   - [Algorithms](HSE/Algorithms/)

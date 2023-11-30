@@ -1,0 +1,9 @@
+# ninja log v5
+1	419	1676652550978172946	CMakeFiles/BubbleSortOptimizedII.dir/main.cpp.o	110a417d41aeddb3
+419	467	1676652551029503458	BubbleSortOptimizedII	5695fe16348fa38e
+1	273	1676755054792163512	CMakeFiles/BubbleSortOptimizedII.dir/main.cpp.o	ba290c5d150adb44
+273	310	1676755054828753914	BubbleSortOptimizedII	5695fe16348fa38e
+1	896	1676802670849991602	CMakeFiles/BubbleSortOptimizedII.dir/main.cpp.o	ba290c5d150adb44
+896	1057	1676802671013265483	BubbleSortOptimizedII	5695fe16348fa38e
+1	464	1676803085945016602	CMakeFiles/BubbleSortOptimizedII.dir/main.cpp.o	ba290c5d150adb44
+464	517	1676803086001735028	BubbleSortOptimizedII	5695fe16348fa38e

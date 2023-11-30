@@ -1,0 +1,5 @@
+# ninja log v5
+0	413	1685165698066505964	CMakeFiles/Floyd_Warshall.dir/main.cpp.o	cbe60e048eba8563
+415	483	1685165698136395593	Floyd_Warshall	759ba4704844ec8a
+11	488	1685165879726441077	CMakeFiles/Floyd_Warshall.dir/main.cpp.o	cbe60e048eba8563
+488	551	1685165879791516857	Floyd_Warshall	759ba4704844ec8a

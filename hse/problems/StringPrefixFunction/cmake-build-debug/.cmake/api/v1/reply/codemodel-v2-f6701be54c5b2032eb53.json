@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.24"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "StringPrefixFunction",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "StringPrefixFunction::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-StringPrefixFunction-Debug-ee1f8237148cce64f2e1.json",
+					"name" : "StringPrefixFunction",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/ContestTasks/StringPrefixFunction/cmake-build-debug",
+		"source" : "/Users/davidnatroshvili/CLionProjects/CPP_AaDS_private/HSE/Semester II/ContestTasks/StringPrefixFunction"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
