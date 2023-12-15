@@ -1,4 +1,4 @@
-#include "../headers/StackUsingQueues.h"
+#include "../headers/stack-using-queues.h"
 
 StackUsingQueues::StackUsingQueues() {
 }
