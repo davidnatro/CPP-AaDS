@@ -1,4 +1,4 @@
-#include "../headers/LRUCache.h"
+#include "../headers/lru-cache.h"
 
 LRUCache::LRUCache(int capacity) {
     this->max_capacity_ = capacity;
