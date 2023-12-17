@@ -7,7 +7,7 @@
 
 class KidsWithTheGreatestNumberOfCandies {
 public:
-    std::vector<bool> kidsWithCandies(std::vector<int>& candies, int extra_candies);
+    std::vector<bool> kidsWithCandies(const std::vector<int>& candies, int extra_candies);
 };
 
 #endif

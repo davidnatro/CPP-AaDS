@@ -1,6 +1,7 @@
 #include "../headers/merge-strings-alternately.h"
 
-std::string MergeStringsAlternately::mergeAlternately(std::string word1, std::string word2) {
+std::string MergeStringsAlternately::mergeAlternately(const std::string &word1,
+                                                      const std::string &word2) {
     std::string result;
 
     for (int i = 0; i < word1.size(); ++i) {

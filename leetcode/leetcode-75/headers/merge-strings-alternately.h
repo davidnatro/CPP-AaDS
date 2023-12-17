@@ -7,7 +7,7 @@
 
 class MergeStringsAlternately {
 public:
-    std::string mergeAlternately(std::string word1, std::string word2);
+    std::string mergeAlternately(const std::string &word1, const std::string &word2);
 };
 
 #endif
