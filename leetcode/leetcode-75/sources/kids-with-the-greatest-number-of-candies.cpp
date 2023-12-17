@@ -1,7 +1,7 @@
 #include "../headers/kids-with-the-greatest-number-of-candies.h"
 
-std::vector<bool> KidsWithTheGreatestNumberOfCandies::kidsWithCandies(std::vector<int> &candies,
-                                                                      int extra_candies) {
+std::vector<bool> KidsWithTheGreatestNumberOfCandies::kidsWithCandies(
+    const std::vector<int> &candies, int extra_candies) {
     std::vector<bool> result(candies.size());
 
     int max = INT32_MIN;

@@ -8,7 +8,7 @@
 
 class GcdOfStrings {
 public:
-    std::string gcdOfStrings(std::string str1, std::string str2);
+    std::string gcdOfStrings(const std::string &str1, const std::string &str2);
 };
 
 #endif
