@@ -8,6 +8,9 @@
 class MaximumNumberOfVowelsInASubstringOfGivenLength {
 public:
     int maxVowels(const std::string &s, int k) const;
+
+private:
+    bool isVowel(char symbol) const;
 };
 
 #endif
