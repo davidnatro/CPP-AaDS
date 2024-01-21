@@ -1,4 +1,3 @@
-
 #include "removing-stars-from-a-string.h"
 
 std::string RemovingStarsFromAString::removeStars(const std::string &s) const {
