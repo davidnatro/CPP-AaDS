@@ -3,6 +3,8 @@
 
 // https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/
 
+#include <limits>
+
 struct ListNode {
     int val;
     ListNode* next;
@@ -15,6 +17,9 @@ struct ListNode {
 class MaximumTwinSumOfALinkedList {
 public:
     int pairSum(ListNode* head) const;
+
+private:
+    ListNode* reverseLinkedList(ListNode* head) const;
 };
 
 #endif
