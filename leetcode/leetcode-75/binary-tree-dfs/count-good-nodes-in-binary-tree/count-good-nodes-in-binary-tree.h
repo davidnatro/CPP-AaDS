@@ -3,6 +3,8 @@
 
 // https://leetcode.com/problems/count-good-nodes-in-binary-tree/
 
+#include <limits>
+
 struct TreeNode {
     int val;
     TreeNode *left;
@@ -16,6 +18,9 @@ struct TreeNode {
 class CountGoodNodesInBinaryTree {
 public:
     int goodNodes(TreeNode *root) const;
+
+private:
+    void dfs(TreeNode *root, int max, int &count) const;
 };
 
 #endif
