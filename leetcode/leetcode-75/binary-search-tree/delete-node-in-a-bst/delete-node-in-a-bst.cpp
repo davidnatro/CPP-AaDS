@@ -1,4 +1,4 @@
-#include "delete-node-in-abst.hpp"
+#include "delete-node-in-a-bst.hpp"
 
 TreeNode::TreeNode() : val(0), left(nullptr), right(nullptr) {
 }
