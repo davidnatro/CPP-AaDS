@@ -10,7 +10,7 @@ class KthLargestElementInAnArray {
  public:
   int heapSelect(const std::vector<int> &nums, const int k) const;
 
-  int quickSelect( std::vector<int> &nums, const int k) const;
+  int quickSelect(std::vector<int> &nums, const int k) const;
 
  private:
   int quickSelect(std::vector<int> &data, const int left, const int right, const int k) const;
