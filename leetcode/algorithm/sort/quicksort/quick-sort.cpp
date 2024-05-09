@@ -11,12 +11,15 @@ void QuickSort::sort(std::vector<int> &data) const {
 void QuickSort::quickSort(std::vector<int> &data, const int left, const int right) const {
   if (left < right) {
     int pivot = partition(data, left, right);
-    quickSort(data, left, pivot - 1);
-    quickSort(data, pivot, right);
+    quickSort(data, left, pivot);
+    quickSort(data, pivot + 1, right);
   }
 }
 
 int QuickSort::partition(std::vector<int> &data, const int left, const int right) const {
+  int mid = left + (right - left) / 2;
+  std::swap(data[mid], data[right]);
+
   int pivot = data[right];
   int i = left;
 
