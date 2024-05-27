@@ -11,6 +11,4 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         CACHE STRING "Compiler flags in ubsan build"
         FORCE)
 
-add_executable(leetcode main.cpp
-        leetcode-75/intervals/minimum-number-of-arrows-to-burst-balloon/minimum-number-of-arrows-to-burst-balloons.cpp)
-
+add_executable(leetcode main.cpp)
