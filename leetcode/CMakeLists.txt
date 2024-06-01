@@ -11,4 +11,4 @@ set(CMAKE_CXX_FLAGS_UBSAN "-g -fsanitize=undefined"
         CACHE STRING "Compiler flags in ubsan build"
         FORCE)
 
-add_executable(leetcode main.cpp)
+add_executable(leetcode main.cpp problems/medium/permutation-in-string/permutation-in-string.cpp)
